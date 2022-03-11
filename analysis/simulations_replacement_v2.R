@@ -63,8 +63,8 @@ metadata[, mobsim_version := as.character(utils::packageVersion("mobsim"))]
 data.table::setcolorder(metadata, neworder = c("unique_id", "parameter_id", "simulation_function", "sRealm_version", "mobsim_version", "date", "seed"))
 
 # Saving results and metadata ----
-data.table::fwrite(dt, file = paste0("./data/simulations/", simulation_ID, "_sim.csv"))
-data.table::fwrite(metadata, file = paste0("./data/simulations/", simulation_ID, "_metadata.csv"))
+data.table::fwrite(dt, file = paste0("./data/simulations/", simulation_ID, "_replacement_sim.csv"))
+data.table::fwrite(metadata, file = paste0("./data/simulations/", simulation_ID, "_replacement_metadata.csv"))
 
 # empty samples?
 if (any(dt[, length(unique(iteration)) != nrep, by = parameter_id])) warning("Some samples were empty and do not appear in the results.")
