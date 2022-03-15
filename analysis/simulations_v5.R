@@ -36,6 +36,8 @@ dt[, rn := as.factor(rn)]
 column_vector <- grep("V", colnames(dt), value = TRUE)
 dt[, (column_vector) := lapply(.SD, function(column) replace(column, column == 0L, NA_integer_)), .SDcols = column_vector] # replace all 0
 
+# columns names: N NOT VALUE
+
 dt <- data.table::melt(dt, id.vars = c(".id", "rn"), na.rm = TRUE, variable.name = "iteration")
 dt[, iteration := as.integer(gsub("V", "", iteration))]
 data.table::setnames(dt, "rn", "species")

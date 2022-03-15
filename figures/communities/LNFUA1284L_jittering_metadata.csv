@@ -1,0 +1,2 @@
+unique_id,parameter_id,sRealm_version,mobsim_version,date,seed,S_POOL,N_SIM,SAD_COEF,SIGMA,QUADRAT_WIDTH,simulation_function
+LNFUA1284L,1,0.1.1.9011,0.2.0.9015,2022-03-13T17:46:19.880735Z,42,20,2000,0.1,0.05,0.1,plotting_simulations_jitter_v3

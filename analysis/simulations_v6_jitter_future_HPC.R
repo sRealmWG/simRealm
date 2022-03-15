@@ -6,13 +6,13 @@ future::plan(future.batchtools::batchtools_slurm,
                 walltime = 180,
                 memory = "6G",
                 ncpus  = 36,
-                output   = "/work/%u/%j-%x.log",
+                output = "/work/%u/%j-%x.log",
                 email  = "sagouis@pm.me"
              )
 )
 
 ### Community
-source("./analysis/parameters/community_v1.r")
+source("./analysis/parameters/community_v2.r")
 
 ### Iterations
 nrep <- 600L
@@ -38,10 +38,10 @@ for (param_i in 1:nrow(parameter_table))  res[[param_i]] %<-% {
 
    ## Iterating
    res_param_i <- vector(mode = 'list', length = nrep)
-   for (iteration in 1:nrep) {
-      comm <- sRealm::jitter_species(comm = comm, sd = 0.01)
-      comm <- sRealm::torusify(comm)
-      res_param_i[[iteration]] <- mobsim::abund_rect(comm = comm, x0 = x0, y0 = y0, xsize = xsize, ysize = ysize)
+   for (timestep in 1:nrep) {
+      comm <- sRealmTools::jitter_species(comm = comm, sd = 0.01)
+      comm <- sRealmTools::torusify(comm)
+      res_param_i[[timestep]] <- mobsim::abund_rect(comm = comm, x0 = x0, y0 = y0, xsize = xsize, ysize = ysize)
    }
    res[[param_i]] <- res_param_i
 } %seed% seed
