@@ -343,9 +343,9 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "AlbanSagouis",
       "RemoteRepo": "mobsim",
-      "RemoteRef": "15fab26dde77e59b2d1b366c4c46ca910a511dd0",
-      "RemoteSha": "15fab26dde77e59b2d1b366c4c46ca910a511dd0",
-      "Hash": "445151a10bc3564ff361a8d3de55e256",
+      "RemoteRef": "master",
+      "RemoteSha": "3948453b9b066263f93f936eb39074b60643187c",
+      "Hash": "5ef39c39d60b5df1455018e140b1e711",
       "Requirements": [
         "Rcpp",
         "sads",
@@ -487,14 +487,18 @@
       "Hash": "9787c1fcb680e655d062e7611cadf78e",
       "Requirements": []
     },
-    "sRealm": {
-      "Package": "sRealm",
+    "sRealmTools": {
+      "Package": "sRealmTools",
       "Version": "0.1.1.9011",
-      "Source": "Local",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "sRealmWG",
+      "RemoteRepo": "sRealmTools",
+      "RemoteRef": "main",
+      "RemoteSha": "12f22ed687788b14ae672b3f849e0a7b6be158a5",
       "Remotes": "github::AlbanSagouis/mobsim",
-      "RemoteType": "local",
-      "RemoteUrl": "C:\\Users\\as80fywe\\idiv\\mob\\mobsim\\sRealm_archives\\sRealm_0.1.1.9011.tar.gz",
-      "Hash": "df4c70bd5d5046a9e00fa7323baeeaa8",
+      "Hash": "15a60d0804c59c5a0b8beb7651e01744",
       "Requirements": [
         "mobsim",
         "spatstat.core",

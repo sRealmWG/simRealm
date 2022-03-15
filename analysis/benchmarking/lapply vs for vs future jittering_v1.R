@@ -18,9 +18,9 @@ jittering_v1_lapply <- function(parameter_set, nrep, seed = NULL) {
    lapply(
       seq_len(nrep),
       function(iteration) {
-         comm <- sRealm::jitter_species(comm = comm, sd = 0.01)
-         comm <<- sRealm::torusify(comm)
-         samp <- mobsim::abund_rect(comm = comm, x0 = x0, y0 = y0, xsize = xsize, ysize = ysize)
+         comm <- sRealmTools::jitter_species(comm = comm, sd = 0.01)
+         comm <<- sRealmTools::torusify(comm)
+         samp <- sRealmTools::abund_rect(comm = comm, x0 = x0, y0 = y0, xsize = xsize, ysize = ysize)
          return(samp)
       }
    )
@@ -46,8 +46,8 @@ jittering_v1_for <- function(parameter_set, nrep, seed = NULL) {
 
    ## Iterating
    for (iteration in 1:nrep) {
-      comm <- sRealm::jitter_species(comm = comm, sd = 0.01)
-      comm <- sRealm::torusify(comm)
+      comm <- sRealmTools::jitter_species(comm = comm, sd = 0.01)
+      comm <- sRealmTools::torusify(comm)
       res_param_i[[iteration]] <- mobsim::abund_rect(comm = comm, x0 = x0, y0 = y0, xsize = xsize, ysize = ysize)
    }
    return(res_param_i)
@@ -97,8 +97,8 @@ microbenchmark::microbenchmark(
          res_param_i <- vector(mode = 'list', length = nrep)
          for (iteration in 1:nrep) {
 
-            comm <- sRealm::jitter_species(comm = comm, sd = 0.01)
-            comm <- sRealm::torusify(comm)
+            comm <- sRealmTools::jitter_species(comm = comm, sd = 0.01)
+            comm <- sRealmTools::torusify(comm)
             res_param_i[[iteration]] <-    mobsim::abund_rect(comm = comm, x0 = x0, y0 = y0, xsize = xsize, ysize = ysize)
 
          }
