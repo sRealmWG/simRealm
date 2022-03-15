@@ -10,14 +10,13 @@ nrep <- 600L
 ### seed
 seed <- 42L
 
-
 # Running the simulations ----
 beginning <- Sys.time()
 source("./analysis/simulations_v6_jitter_future_HPC.R", local = FALSE)
 Sys.time() - beginning
+
 # Reading the simulations ----
 # res <- readRDS(file = "./data/simulations/sim_jitter_6.rds")
-
 
 # Wrangling the results ----
 beginning <- Sys.time()
@@ -33,8 +32,9 @@ dt <- lapply(dt, function(param_i) data.table::melt(param_i,
                                                     value.name = "N"
 )
 )
+dt <- lapply(dt, function(dt_element) dt_element[N > 0L])
 dt <- data.table::rbindlist(dt, idcol = TRUE)
-dt <- dt[N > 0L]
+
 dt[, rn := as.factor(rn)]
 data.table::setnames(dt, 1L:3L, c("parameter_id", "timestep", "quadrat_id"))
 data.table::setcolorder(dt, neworder = c("parameter_id", "quadrat_id", "timestep"))
