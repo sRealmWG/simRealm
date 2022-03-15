@@ -36,7 +36,7 @@ dt <- data.table::rbindlist(
    idcol = TRUE,
    l = lapply(
       res,
-      \(table_parameter_id) data.table::rbindlist(
+      function(table_parameter_id) data.table::rbindlist(
          idcol = TRUE,
          l = lapply(table_parameter_id, data.table::as.data.table)
       )[N != 0L]

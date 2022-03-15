@@ -11,7 +11,7 @@ nrep <- 100L
 seed <- 42L
 
 # Running many steps for 1 scenario ----
-simulation_ID <- sRealm::create_random_ID(1L)
+simulation_ID <- sRealmTools::create_random_ID(1L)
 grDevices::pdf(onefile = TRUE, file =  paste0("./figures/communities/", simulation_ID, "_jittering.pdf"))
 
 ## Initialising ----
@@ -28,8 +28,8 @@ plot(comm)
 
 ## Iterating ----
 for (i in 1L:nrep) {
-   comm <- sRealm::jitter_species(comm = comm, sd = 0.01)
-   comm <- sRealm::torusify(comm)
+   comm <- sRealmTools::jitter_species(comm = comm, sd = 0.01)
+   comm <- sRealmTools::torusify(comm)
    plot(comm)
 }
 dev.off()
@@ -40,10 +40,10 @@ metadata[, parameter_id := seq_len(nrow(metadata))]
 metadata[, unique_id := simulation_ID]
 metadata[, date := Sys.time()]
 metadata[, seed := seed]
-metadata[, sRealm_version := as.character(utils::packageVersion("sRealm"))]
+metadata[, sRealmTools_version := as.character(utils::packageVersion("sRealmTools"))]
 metadata[, mobsim_version := as.character(utils::packageVersion("mobsim"))]
 
-data.table::setcolorder(metadata, neworder = c("unique_id","parameter_id", "sRealm_version", "mobsim_version", "date", "seed"))
+data.table::setcolorder(metadata, neworder = c("unique_id","parameter_id", "sRealmTools_version", "mobsim_version", "date", "seed"))
 
 ## Saving metadata ----
 data.table::fwrite(metadata, file = paste0("./figures/communities/", simulation_ID, "jittering_metadata.csv"))
@@ -52,7 +52,7 @@ data.table::fwrite(metadata, file = paste0("./figures/communities/", simulation_
 
 
 # Running the first step for all scenarios ----
-simulation_ID <- sRealm::create_random_ID(1L)
+simulation_ID <- sRealmTools::create_random_ID(1L)
 set.seed(seed)
 grDevices::pdf(onefile = TRUE, file = paste0("./figures/communities/", simulation_ID, "_initials.pdf"))
 
@@ -76,7 +76,7 @@ metadata[, parameter_id := seq_len(nrow(metadata))]
 metadata[, unique_id := simulation_ID]
 metadata[, date := Sys.time()]
 metadata[, seed := seed]
-metadata[, sRealm_version := as.character(utils::packageVersion("sRealm"))]
+metadata[, sRealmTools_version := as.character(utils::packageVersion("sRealmTools"))]
 metadata[, mobsim_version := as.character(utils::packageVersion("mobsim"))]
 
 data.table::setcolorder(metadata, neworder = c("unique_id","parameter_id", "sRealm_version", "mobsim_version", "date", "seed"))
