@@ -337,15 +337,15 @@
     },
     "mobsim": {
       "Package": "mobsim",
-      "Version": "0.2.0.9011",
+      "Version": "0.2.0.9015",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "AlbanSagouis",
       "RemoteRepo": "mobsim",
       "RemoteRef": "master",
-      "RemoteSha": "d54e9a47de525c4b2757781e2c2c66a3bed04371",
-      "Hash": "fe0e9d45a189df800205e558a58e932d",
+      "RemoteSha": "3948453b9b066263f93f936eb39074b60643187c",
+      "Hash": "5ef39c39d60b5df1455018e140b1e711",
       "Requirements": [
         "Rcpp",
         "sads",
