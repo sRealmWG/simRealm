@@ -2,8 +2,8 @@
 
 library(tidyverse)
 
-load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid1-24.Rdata')
-# load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid-25-48.Rdata')
+# load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid1-24.Rdata')
+load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid-25-48.Rdata')
 
 # separate each of the subsamples and nest all time steps for a given timeSeriesID
 ss100_s55 <- site55 %>% 
@@ -229,4 +229,4 @@ save(alpha_scale_10,
      beta_dist_10,
      beta_dist_50,
      beta_dist_100,
-     file = '~/Dropbox/1current/sRealm/results/mob_sim_local_metrics_alpha_beta_diss_pid_1-24.Rdata')
+     file = '~/Dropbox/1current/sRealm/simRealm/prelim_results/mob_sim_local_metrics_alpha_beta_diss_pid_25-48.Rdata')
