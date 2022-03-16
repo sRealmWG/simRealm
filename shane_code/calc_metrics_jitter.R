@@ -2,9 +2,8 @@
 
 library(tidyverse)
 
-load('~/Dropbox/1current/sRealm/local_data/all_timeSeries_subsample_pid1-24.Rdata')
 load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid1-24.Rdata')
-
+# load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid-25-48.Rdata')
 
 # separate each of the subsamples and nest all time steps for a given timeSeriesID
 ss100_s55 <- site55 %>% 
@@ -52,7 +51,8 @@ for(i in 1:nrow(ss100_s55)){
     group_by(parameter_id, timeSeriesID, timestep) %>% 
     summarise(S = n_distinct(species),
               S_PIE = mobr::calc_SPIE(N),
-              N_all = sum(N)) %>% 
+              N_all = sum(N),
+              C_hat = mobr::Chat(N, N_all)) %>% 
     ungroup()
   
   comm_wide = comm_long %>% 
@@ -70,7 +70,7 @@ for(i in 1:nrow(ss100_s55)){
                      YEAR2 = yr_pairs[2,])
   
   # morisita-horn
-  MH_dist <- as.matrix(vegan::vegdist(comm_wide[,-1], method='horn')) 
+  MH_dist <- as.matrix(vegan::vegdist(comm_wide[,-c(1,2)], method='horn')) 
   
   # two steps for Jaccard components (so as calculation is done only once)
   J_components <-betapart:: beta.pair(comm_wide_binary, index.family='jaccard')	# distance
@@ -126,7 +126,7 @@ for(i in 1:nrow(ss50_s55)){
                      YEAR2 = yr_pairs[2,])
   
   # morisita-horn
-  MH_dist <- as.matrix(vegan::vegdist(comm_wide[,-1], method='horn')) 
+  MH_dist <- as.matrix(vegan::vegdist(comm_wide[,-c(1,2)], method='horn')) 
   
   # two steps for Jaccard components (so as calculation is done only once)
   J_components <-betapart:: beta.pair(comm_wide_binary, index.family='jaccard')	# distance
@@ -200,7 +200,7 @@ for(i in 1:nrow(ss10_s55)){
     comm_wide_binary <- with(comm_wide[,-c(1,2)], ifelse(comm_wide[,-c(1,2)] > 0, 1, 0))  
   
     # morisita-horn
-    MH_dist <- as.matrix(vegan::vegdist(comm_wide[,-1], method='horn')) 
+    MH_dist <- as.matrix(vegan::vegdist(comm_wide[,-c(1,2)], method='horn')) 
     
     # two steps for Jaccard components (so as calculation is done only once)
     J_components <-betapart:: beta.pair(comm_wide_binary, index.family='jaccard')	# distance
@@ -229,4 +229,4 @@ save(alpha_scale_10,
      beta_dist_10,
      beta_dist_50,
      beta_dist_100,
-     file = '~/Dropbox/1current/sRealm/results/local_metrics_alpha_beta_diss.Rdata')
+     file = '~/Dropbox/1current/sRealm/results/mob_sim_local_metrics_alpha_beta_diss_pid_1-24.Rdata')
