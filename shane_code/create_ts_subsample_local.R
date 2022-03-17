@@ -11,7 +11,8 @@ dat <- dat_all %>%
   filter(!parameter_id %in% meta1$parameter_id)
 
 rm(dat_all, meta1, meta_all)
-load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_IF.Rdata')
+load('~/Dropbox/1current/sRealm/simRealm/data/time_series/timeSeries_site55_pid1-24.Rdata')
+rm(site55)
 # want to subsample time series with duration between 3-100 years
 # duration = tibble(d = floor(rlnorm(n = 250, meanlog = 2.3, sdlog = 1))) %>% 
 #   filter(d > 2 & d < 101)
@@ -25,19 +26,19 @@ dat_nest <- dat %>%
   nest(data = c(species, N)) %>% 
   ungroup()
 
-dat_nest <- dat_nest %>% 
-  rename(timestep1 = quadrat_id,
-         quadrat_id = timestep) %>% 
-  rename(timestep = timestep1)
+# dat_nest <- dat_nest %>% 
+#   rename(timestep1 = quadrat_id,
+#          quadrat_id = timestep) %>% 
+#   rename(timestep = timestep1)
 
 # get ~200 time series with duration d from each parameter_id
 dat_ts = tibble()
 for(i in 1:nrow(duration)){
   print(paste(i, ' of ', nrow(duration), ' time series'))
+  start_point <- floor(runif(1, min = 1, max = 500))
   ts_id = dat_nest %>% 
     group_by(parameter_id, quadrat_id) %>% 
-    slice_min(order_by = timestep,
-              n = duration$d[i]) %>% 
+    slice(start_point:(start_point + duration$d[i])) %>% 
     ungroup() %>% 
     mutate(timeSeriesID = paste0('ts', i)) 
   
@@ -67,8 +68,8 @@ site55 = dat_ts %>%
 # save site55
 save(duration, 
      site55,
-     file = '~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid-25-48.Rdata')
+     file = '~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid-1-24.Rdata')
 
 # save all the time series (and the subsamples of site55 only)
 save(dat_ts, 
-     file = '~/Dropbox/1current/sRealm/local_data/all_timeSeries_subsample_pid-25-48.Rdata')
+     file = '~/Dropbox/1current/sRealm/local_data/all_timeSeries_subsample_pid-1-24.Rdata')
