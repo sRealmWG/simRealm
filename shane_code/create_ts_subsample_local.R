@@ -3,15 +3,9 @@
 library(tidyverse)
 
 dat <- read_csv('~/Dropbox/1current/sRealm/local_data/IFYAH3130E_jitter_sim.csv')
-dat_all <- read_csv('~/Dropbox/1current/sRealm/local_data/ZXSAX1088U_jitter_sim.csv')
 meta1 <- read_csv('~/Dropbox/1current/sRealm/local_data/IFYAH3130E_jitter_metadata.csv')
-meta_all <- read_csv('~/Dropbox/1current/sRealm/local_data/ZXSAX1088U_jitter_metadata.csv')
 
-dat <- dat_all %>% 
-  filter(!parameter_id %in% meta1$parameter_id)
-
-rm(dat_all, meta1, meta_all)
-load('~/Dropbox/1current/sRealm/simRealm/data/time_series/timeSeries_site55_pid1-24.Rdata')
+load('~/Dropbox/1current/sRealm/simRealm/data/time_series/timeSeries_site55_pid-1-24.Rdata')
 rm(site55)
 # want to subsample time series with duration between 3-100 years
 # duration = tibble(d = floor(rlnorm(n = 250, meanlog = 2.3, sdlog = 1))) %>% 
@@ -35,13 +29,13 @@ dat_nest <- dat %>%
 dat_ts = tibble()
 for(i in 1:nrow(duration)){
   print(paste(i, ' of ', nrow(duration), ' time series'))
-  start_point <- floor(runif(1, min = 1, max = 500))
+  start_point <- floor(runif(1, min = 1, max = 450))
+  
   ts_id = dat_nest %>% 
     group_by(parameter_id, quadrat_id) %>% 
-    slice(start_point:(start_point + duration$d[i])) %>% 
+    filter(timestep %in% start_point:(start_point+duration$d[i])) %>% 
     ungroup() %>% 
-    mutate(timeSeriesID = paste0('ts', i)) 
-  
+    mutate(timeSeriesID = paste0('ts', i))
   
   dat_ts = bind_rows(dat_ts, ts_id)
 }

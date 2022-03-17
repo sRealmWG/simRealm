@@ -2,7 +2,7 @@
 
 library(tidyverse)
 
-load('~/Dropbox/1current/sRealm/simRealm/data/time_series/timeSeries_site55_pid1-24.Rdata')
+load('~/Dropbox/1current/sRealm/simRealm/data/time_series/timeSeries_site55_pid-1-24.Rdata')
 # load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid-25-48.Rdata')
 
 # separate each of the subsamples and nest all time steps for a given timeSeriesID
