@@ -24,12 +24,12 @@ neutral_dat_nest <- neutral_dat %>%
 neutral_dat_ts = tibble()
 for(i in 1:nrow(duration)){
   print(paste(i, ' of ', nrow(duration), ' time series'))
-  ts_id = neutral_dat_nest %>% 
-    group_by(parameter_id) %>% 
-    slice_min(order_by = timestep,
-              n = duration$d[i]) %>% 
+  start_point <- floor(runif(1, min = 1, max = 500))
+  ts_id = dat_nest %>% 
+    group_by(parameter_id, quadrat_id) %>% 
+    slice(start_point:(start_point + duration$d[i])) %>% 
     ungroup() %>% 
-    mutate(timeSeriesID = paste0('ts', i)) 
+    mutate(timeSeriesID = paste0('ts', i))
   
   
   neutral_dat_ts = bind_rows(neutral_dat_ts, ts_id)

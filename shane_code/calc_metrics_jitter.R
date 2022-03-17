@@ -2,8 +2,8 @@
 
 library(tidyverse)
 
-# load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid1-24.Rdata')
-load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid-25-48.Rdata')
+load('~/Dropbox/1current/sRealm/simRealm/data/time_series/timeSeries_site55_pid1-24.Rdata')
+# load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid-25-48.Rdata')
 
 # separate each of the subsamples and nest all time steps for a given timeSeriesID
 ss100_s55 <- site55 %>% 
@@ -32,11 +32,7 @@ ss10_s55 <- site55 %>%
 
 # initialise storage
 alpha_scale_100 <- tibble()
-alpha_scale_50 <- tibble()
-alpha_scale_10 <- tibble()
 beta_dist_100 <- tibble() # dissimilarity
-beta_dist_50 <- tibble() 
-beta_dist_10 <- tibble() 
 
 for(i in 1:nrow(ss100_s55)){
   # counter for sanity
@@ -92,8 +88,9 @@ for(i in 1:nrow(ss100_s55)){
   alpha_scale_100 = bind_rows(alpha_scale_100, alpha_temp)
 }
 
-
 # repeat for 50 subsample
+alpha_scale_50 <- tibble()
+beta_dist_50 <- tibble() 
 for(i in 1:nrow(ss50_s55)){
   # counter for sanity
   print(paste('calculation ', i, 'of ', nrow(ss50_s55)))
@@ -148,7 +145,10 @@ for(i in 1:nrow(ss50_s55)){
   alpha_scale_50 = bind_rows(alpha_scale_50, alpha_temp)
 }
 
+
 # repeat for 10% subsample
+alpha_scale_10 <- tibble()
+beta_dist_10 <- tibble() 
 for(i in 1:nrow(ss10_s55)){
   # counter for sanity
   print(paste('calculation ', i, 'of ', nrow(ss10_s55)))
@@ -167,12 +167,12 @@ for(i in 1:nrow(ss10_s55)){
     ungroup()
   
   # initialise matrix for storing all pairs
-  if(nrow(comm_long) == 1){
+  if(length(unique(comm_long$timestep)) == 1){
   all_pairs = tibble(YEAR1 = NULL,
                      YEAR2 = NULL)
   }
   
-  if(nrow(comm_long) == 1){
+  if(length(unique(comm_long$timestep)) == 1){
     all_pairs = all_pairs %>% 
       mutate(Jbeta = NULL,
              Jtu = NULL,
@@ -183,7 +183,7 @@ for(i in 1:nrow(ss10_s55)){
              timeSeriesID = unique(comm_long$timeSeriesID))
   }
   
-  if(nrow(comm_long) > 1){
+  if(length(unique(comm_long$timestep)) > 1){
     
     # initialise matrix for storing all pairs
     yr_pairs = combn(unique(comm_long$timestep), 2)
@@ -229,4 +229,4 @@ save(alpha_scale_10,
      beta_dist_10,
      beta_dist_50,
      beta_dist_100,
-     file = '~/Dropbox/1current/sRealm/simRealm/prelim_results/mob_sim_local_metrics_alpha_beta_diss_pid_25-48.Rdata')
+     file = '~/Dropbox/1current/sRealm/simRealm/prelim_results/mob_sim_local_metrics_alpha_beta_diss_pid_1-24.Rdata')
