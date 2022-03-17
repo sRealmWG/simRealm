@@ -2,7 +2,7 @@
 
 library(tidyverse)
 
-neutral_neutral_dat <- read_csv('~/Dropbox/1current/sRealm/simRealm/neutral_data/simulations/QEAYJ1252R_neutral_sim.csv')
+neutral_dat <- read_csv('~/Dropbox/1current/sRealm/simRealm/data/simulations/QEAYJ1252R_neutral_sim.csv')
 
 # want to subsample time series with duration between 3-100 years
 # use same distribution of durations created for mobsim calculations
@@ -24,9 +24,11 @@ neutral_dat_nest <- neutral_dat %>%
 neutral_dat_ts = tibble()
 for(i in 1:nrow(duration)){
   print(paste(i, ' of ', nrow(duration), ' time series'))
+  # random starting point
   start_point <- floor(runif(1, min = 1, max = 500))
-  ts_id = dat_nest %>% 
-    group_by(parameter_id, quadrat_id) %>% 
+  
+  ts_id = neutral_dat_nest %>% 
+    group_by(parameter_id) %>% 
     slice(start_point:(start_point + duration$d[i])) %>% 
     ungroup() %>% 
     mutate(timeSeriesID = paste0('ts', i))
@@ -56,8 +58,5 @@ neutral_local_ts = neutral_dat_ts %>%
 # save site55
 save(duration, 
      neutral_local_ts,
-     file = '~/Dropbox/1current/sRealm/local_neutral_data/timeSeries_site55_pid-25-48.Rdata')
+     file = '~/Dropbox/1current/sRealm/simRealm/data/time_series/neutral_time_series.Rdata')
 
-# save all the time series (and the subsamples of site55 only)
-save(neutral_dat_ts, 
-     file = '~/Dropbox/1current/sRealm/local_neutral_data/all_timeSeries_subsample_pid-25-48.Rdata')
