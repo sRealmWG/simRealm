@@ -86,6 +86,6 @@ all_neutral %>%
    ggplot(aes(x = temp_dist, y = jbeta)) + geom_point() + stat_smooth(method = "lm") +
    facet_grid(m ~ theta )
 
-ggsave("figures/neutral-jbeta-temp_dist.pdf", width = 12, height = 14)
+ggsave("figures/neutral-jbeta-temp_dist.png", width = 12, height = 14)
 
 
