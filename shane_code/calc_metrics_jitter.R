@@ -2,6 +2,7 @@
 
 library(tidyverse)
 
+
 load('~/Dropbox/1current/sRealm/simRealm/data/time_series/timeSeries_site55_pid-1-24.Rdata')
 # load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid-25-48.Rdata')
 
@@ -41,7 +42,8 @@ for(i in 1:nrow(ss100_s55)){
   # long data
   comm_long = ss100_s55 %>% 
     slice(i) %>% 
-    unnest(data)
+    unnest(data) %>% 
+    arrange(-desc(timestep))
   
   alpha_temp <- comm_long %>% 
     group_by(parameter_id, timeSeriesID, timestep) %>% 
@@ -98,7 +100,8 @@ for(i in 1:nrow(ss50_s55)){
   # long data
   comm_long = ss50_s55 %>% 
     slice(i) %>% 
-    unnest(data)
+    unnest(data) %>% 
+    arrange(-desc(timestep))
   
   alpha_temp <- comm_long %>% 
     group_by(parameter_id, timeSeriesID, timestep) %>% 
@@ -156,7 +159,8 @@ for(i in 1:nrow(ss10_s55)){
   # long data
   comm_long = ss10_s55 %>% 
     slice(i) %>% 
-    unnest(data)
+    unnest(data) %>% 
+    arrange(-desc(timestep))
   
   alpha_temp <- comm_long %>% 
     group_by(parameter_id, timeSeriesID, timestep) %>% 
@@ -222,6 +226,16 @@ for(i in 1:nrow(ss10_s55)){
   beta_dist_10 = bind_rows(beta_dist_10, all_pairs)
   alpha_scale_10 = bind_rows(alpha_scale_10, alpha_temp)
 }
+
+
+beta_dist_10 <- beta_dist_10 %>% 
+  mutate(temp_dist = YEAR2 - YEAR1)
+
+beta_dist_50 <- beta_dist_10 %>% 
+  mutate(temp_dist = YEAR2 - YEAR1)
+
+beta_dist_100 <- beta_dist_10 %>% 
+  mutate(temp_dist = YEAR2 - YEAR1)
 
 save(alpha_scale_10,
      alpha_scale_50,
