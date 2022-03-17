@@ -17,4 +17,6 @@ inside this folder, installing `sRealmTools` should also install Alban's version
 ```
 renv::activate()
 renv::install("sRealmWG/sRealmTools")
+renv::restore() # to install packages used by collaborators
+renv::snapshot() # to save/update the list of packages you use
 ```
