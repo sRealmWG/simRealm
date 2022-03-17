@@ -4,6 +4,7 @@ library(tidyverse)
 
 
 load('~/Dropbox/1current/sRealm/simRealm/data/time_series/timeSeries_site55_pid-1-24.Rdata')
+load('~/Dropbox/1current/sRealm/simRealm/data/time_series/neutral_time_series.Rdata')
 # load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid-25-48.Rdata')
 
 # separate each of the subsamples and nest all time steps for a given timeSeriesID
@@ -244,3 +245,7 @@ save(alpha_scale_10,
      beta_dist_50,
      beta_dist_100,
      file = '~/Dropbox/1current/sRealm/simRealm/prelim_results/mob_sim_local_metrics_alpha_beta_diss_pid_1-24.Rdata')
+
+write.csv(beta_dist_100, file = '~/Dropbox/1current/sRealm/simRealm/prelim_results/beta_dist_100.csv')
+write.csv(beta_dist_50, file = '~/Dropbox/1current/sRealm/simRealm/prelim_results/beta_dist_50.csv')
+write.csv(beta_dist_10, file = '~/Dropbox/1current/sRealm/simRealm/prelim_results/beta_dist_10.csv')
