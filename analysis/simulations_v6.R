@@ -19,12 +19,12 @@ res <- simulation_v7_jitter_future(nyears = nyears, strategy = "multisession", s
 Sys.time() - beginning
 
 # Reading the simulations ----
-# res <- readRDS(file = "./data/simulations/mobsim/temporary_files/sim_jitter_7.rds")
+# res <- readRDS(file = paste0("./data/simulations/mobsim/temporary_files/", simulation_ID, "_sim_jitter_7.rds"))
 
 # Wrangling the results ----
 beginning <- Sys.time()
-dt <- lapply(res, function(timestep) data.table::rbindlist(
-   lapply(timestep, data.table::as.data.table, keep.rownames = TRUE),
+dt <- lapply(res, function(param_i) data.table::rbindlist(
+   lapply(param_i, data.table::as.data.table, keep.rownames = TRUE),
    idcol = TRUE
 )
 )

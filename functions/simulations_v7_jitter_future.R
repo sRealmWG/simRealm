@@ -40,7 +40,7 @@ simulation_v7_jitter_future <- function(strategy = "multisession", nyears = 5L, 
       ## Iterating
       res_param_i <- vector(mode = 'list', length = nyears)
       for (timestep in 1:nyears) {
-         comm <- sRealmTools::jitter_species(comm = comm, sd = 0.01)
+         comm <- sRealmTools::jitter_species(comm = comm, sd = parameter_table$MOVEMENT_SD[param_i])
          comm <- sRealmTools::torusify(comm)
          res_param_i[[timestep]] <- mobsim::sample_quadrats(comm = comm, n_quadrats = parameter_table$N_QUADRATS[param_i], quadrat_area = parameter_table$QUADRAT_AREA[param_i], method = "grid", plot = FALSE)$spec_dat
       }
