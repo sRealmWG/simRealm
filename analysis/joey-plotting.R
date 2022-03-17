@@ -83,6 +83,7 @@ all_neutral %>%
 
 all_neutral %>%
    filter(parameter_id %in% c(1:12)) %>%
+   filter(n == 200) %>%
    ggplot(aes(x = temp_dist, y = jbeta)) + geom_point() + stat_smooth(method = "lm") +
    facet_grid(m ~ theta )
 
