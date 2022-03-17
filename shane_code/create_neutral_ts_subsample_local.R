@@ -6,7 +6,7 @@ neutral_dat <- read_csv('~/Dropbox/1current/sRealm/simRealm/data/simulations/QEA
 
 # want to subsample time series with duration between 3-100 years
 # use same distribution of durations created for mobsim calculations
-load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid1-24.Rdata')
+load('~/Dropbox/1current/sRealm/simRealm/data/time_series/timeSeries_site55_pid-1-24.Rdata')
 rm(site55)
 # duration = tibble(d = floor(rlnorm(n = 250, meanlog = 2.3, sdlog = 1))) %>% 
 #   filter(d > 2 & d < 101)
@@ -27,8 +27,8 @@ for(i in 1:nrow(duration)){
   # random starting point
   start_point <- floor(runif(1, min = 1, max = 500))
   
-  ts_id = dat_nest %>% 
-    group_by(parameter_id, quadrat_id) %>% 
+  ts_id = neutral_dat_nest %>% 
+    group_by(parameter_id) %>% 
     filter(timestep %in% start_point:(start_point+duration$d[i])) %>% 
     ungroup() %>% 
     mutate(timeSeriesID = paste0('ts', i))

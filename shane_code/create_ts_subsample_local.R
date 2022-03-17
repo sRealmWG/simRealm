@@ -28,7 +28,9 @@ dat_nest <- dat %>%
 # get ~200 time series with duration d from each parameter_id
 dat_ts = tibble()
 for(i in 1:nrow(duration)){
+  
   print(paste(i, ' of ', nrow(duration), ' time series'))
+  
   start_point <- floor(runif(1, min = 1, max = 450))
   
   ts_id = dat_nest %>% 
