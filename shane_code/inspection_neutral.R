@@ -12,7 +12,7 @@ neutral_meta <- neutral_meta %>%
   mutate(label = paste0(THETA, ', ', M, ', ', N))
 
 # calculate durations for each time series
-duration <- neutral_100 %>% 
+neutral_duration <- neutral_100 %>% 
   group_by(parameter_id, timeSeriesID) %>% 
   summarise(duration = max(YEAR2) - min(YEAR1)) %>% 
   ungroup()
@@ -64,26 +64,17 @@ neutral_baseline_100 %>%
   unnest(Jac_lm_tidy) %>% 
   filter(term=='.x$cYear') %>% 
   left_join(neutral_meta) %>%
-  left_join(duration) %>% 
+  left_join(neutral_duration) %>% 
   ggplot() +
   facet_wrap(~label, ncol = 4) +
-  geom_point(aes(x = duration, y = estimate)) +
+  geom_point(aes(x = duration, y = estimate), 
+             size = 0.5, alpha = 0.5) +
+  stat_smooth(aes(x = duration, y = estimate),
+              se = F) +
   labs(x = 'duration', 
        y = 'Jaccard slope (rate of turnover)',
        subtitle = 'Comparisons to initial assemblage')
 
-
-baseline_100_coefs %>% 
-  select(parameter_id, timeSeriesID) %>% 
+ggsave('~/Dropbox/1current/sRealm/simRealm/simRealm/figures/neutral_slopes_duration.png',
+       width = 290, height = 200, units = 'mm')
   
-  group_by()
-unnest(data) %>% 
-  # filter(term=='.x$cYear') %>% 
-  left_join(meta) %>% 
-  ggplot() +
-  facet_wrap(~label, ncol = 4) +
-  geom_point(aes(x = YEAR2, y = Jbeta, colour = timeSeriesID),
-             size = 0.5) +
-  # stat_smooth(method = 'lm', se = F,
-  #             aes(x = YEAR2, y = Jbeta, colour = timeSeriesID))
-  theme(legend.position = 'none')

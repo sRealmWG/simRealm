@@ -110,3 +110,17 @@ allYrs_100 %>%
        y = 'Jaccard slope (rate of turnover)',
        subtitle = 'Comparisons to initial assemblage')
 
+allYrs_100 %>%
+  left_join(meta) %>% 
+  unnest(data) %>% 
+  ggplot() +
+  facet_wrap(~label) +
+  geom_point(aes(x = temp_dist, y = Jbeta, colour = timeSeriesID),
+             size = 0.5, alpha = 0.5) +
+  stat_smooth(method = 'lm', se = F,
+              aes(x = temp_dist, y = Jbeta, colour = timeSeriesID),
+              size = 0.75) +
+  theme(legend.position = 'none')
+
+ggsave('~/Dropbox/1current/sRealm/simRealm/simRealm/figures/mobsim_jbeta_tempDist.png',
+       width = 300, height = 200, units = 'mm')  
