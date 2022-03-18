@@ -103,12 +103,16 @@ neutral_consecutive_100 %>%
   left_join(neutral_meta) %>% 
   ggplot() +
   facet_wrap(~label) +
-  geom_point(aes(x = estimate, estimate_consec)) +
+  geom_point(aes(x = estimate, y = estimate_consec)) +
+  geom_hline(yintercept = 0, lty = 2) +
+  geom_vline(xintercept = 0, lty = 2) +
   geom_abline(intercept = 0, slope = 1, lty = 2) +
   stat_smooth(method = 'lm',
               aes(x = estimate, estimate_consec)) +
   labs(x = 'comparison to initial assemblage (slope)',
-       y = 'consecutive comparisons (slope)')
+       y = 'consecutive comparisons (slope)') +
+  theme_minimal() +
+  theme(plot.background = element_rect(fill = 'white'))
 
 ggsave('~/Dropbox/1current/sRealm/simRealm/simRealm/figures/neutral_consecutive_initial_slope_comparison.png',
        width = 290, height = 200, units = 'mm')
