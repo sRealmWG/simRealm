@@ -230,10 +230,10 @@ for(i in 1:nrow(neutral_ss10)){
 beta_dist_10 <- beta_dist_10 %>% 
   mutate(temp_dist = YEAR2 - YEAR1)
 
-beta_dist_50 <- beta_dist_10 %>% 
+beta_dist_50 <- beta_dist_50 %>% 
   mutate(temp_dist = YEAR2 - YEAR1)
 
-beta_dist_100 <- beta_dist_10 %>% 
+beta_dist_100 <- beta_dist_100 %>% 
   mutate(temp_dist = YEAR2 - YEAR1)
 
 save(alpha_scale_10,
@@ -244,6 +244,6 @@ save(alpha_scale_10,
      beta_dist_100,
      file = '~/Dropbox/1current/sRealm/simRealm/prelim_results/neutral_local_metrics_alpha_beta_dist.Rdata')
 
-write.csv(beta_dist_100, file = '~/Dropbox/1current/sRealm/simRealm/prelim_results/netural_beta_dist_100.csv')
-write.csv(beta_dist_50, file = '~/Dropbox/1current/sRealm/simRealm/prelim_results/netural_beta_dist_50.csv')
-write.csv(beta_dist_10, file = '~/Dropbox/1current/sRealm/simRealm/prelim_results/netural_beta_dist_10.csv')
+write.csv(beta_dist_100, file = '~/Dropbox/1current/sRealm/simRealm/prelim_results/neutral_beta_dist_100.csv')
+write.csv(beta_dist_50, file = '~/Dropbox/1current/sRealm/simRealm/prelim_results/neutral_beta_dist_50.csv')
+write.csv(beta_dist_10, file = '~/Dropbox/1current/sRealm/simRealm/prelim_results/neutral_beta_dist_10.csv')
