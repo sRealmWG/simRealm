@@ -4,7 +4,7 @@ library(tidyverse)
 
 
 load('~/Dropbox/1current/sRealm/simRealm/data/time_series/timeSeries_site55_pid-1-24.Rdata')
-load('~/Dropbox/1current/sRealm/simRealm/data/time_series/neutral_time_series.Rdata')
+# load('~/Dropbox/1current/sRealm/simRealm/data/time_series/neutral_time_series.Rdata')
 # load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid-25-48.Rdata')
 
 # separate each of the subsamples and nest all time steps for a given timeSeriesID
@@ -232,10 +232,10 @@ for(i in 1:nrow(ss10_s55)){
 beta_dist_10 <- beta_dist_10 %>% 
   mutate(temp_dist = YEAR2 - YEAR1)
 
-beta_dist_50 <- beta_dist_10 %>% 
+beta_dist_50 <- beta_dist_50 %>% 
   mutate(temp_dist = YEAR2 - YEAR1)
 
-beta_dist_100 <- beta_dist_10 %>% 
+beta_dist_100 <- beta_dist_100 %>% 
   mutate(temp_dist = YEAR2 - YEAR1)
 
 save(alpha_scale_10,
