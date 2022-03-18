@@ -30,6 +30,19 @@ neutral_baseline_100 <- neutral_100 %>%
   mutate(Jac_lm_tidy = map(Jac_lm, broom::tidy),
          MH_lm_tidy = map(mh_lm, broom::tidy))
 
+neutral_consecutive_100 <- neutral_100 %>% 
+  group_by(parameter_id, timeSeriesID) %>% 
+  filter((YEAR2 - YEAR1) == 1) %>% 
+  ungroup() %>% 
+  group_by(parameter_id, timeSeriesID) %>% 
+  mutate(cYear = YEAR2 - mean(YEAR2)) %>% 
+  select(parameter_id, timeSeriesID, YEAR2, cYear, Jbeta, MH_dist) %>% 
+  nest(data = c(cYear, YEAR2, Jbeta, MH_dist)) %>% 
+  mutate(Jac_lm = map(data, ~lm(.x$Jbeta ~ .x$cYear)),
+         mh_lm = map(data, ~lm(.x$MH_dist ~ .x$cYear))) %>% 
+  mutate(Jac_lm_tidy = map(Jac_lm, broom::tidy),
+         MH_lm_tidy = map(mh_lm, broom::tidy))
+
 neutral_allYrs_100 <- neutral_100 %>% 
   group_by(parameter_id, timeSeriesID) %>% 
   mutate(c_temp_dist = temp_dist - mean(temp_dist)) %>% 
@@ -78,3 +91,24 @@ neutral_baseline_100 %>%
 ggsave('~/Dropbox/1current/sRealm/simRealm/simRealm/figures/neutral_slopes_duration.png',
        width = 290, height = 200, units = 'mm')
   
+neutral_consecutive_100 %>% 
+  unnest(Jac_lm_tidy) %>% 
+  filter(term=='.x$cYear') %>% 
+  rename(estimate_consec = estimate) %>% 
+  select(parameter_id, timeSeriesID, estimate_consec) %>% 
+  left_join(neutral_baseline_100 %>% 
+              unnest(Jac_lm_tidy) %>% 
+              filter(term=='.x$cYear') %>% 
+              select(parameter_id, timeSeriesID, estimate)) %>% 
+  left_join(neutral_meta) %>% 
+  ggplot() +
+  facet_wrap(~label) +
+  geom_point(aes(x = estimate, estimate_consec)) +
+  geom_abline(intercept = 0, slope = 1, lty = 2) +
+  stat_smooth(method = 'lm',
+              aes(x = estimate, estimate_consec)) +
+  labs(x = 'comparison to initial assemblage (slope)',
+       y = 'consecutive comparisons (slope)')
+
+ggsave('~/Dropbox/1current/sRealm/simRealm/simRealm/figures/neutral_consecutive_initial_slope_comparison.png',
+       width = 290, height = 200, units = 'mm')
