@@ -1,6 +1,6 @@
 # fit linear models to distances measures of turnover
 
-beta_dist_100 <- read_csv()
+beta_dist_100 <- read_csv('~/Dropbox/1current/sRealm/local_data/beta_dist_100.csv')
 meta <- read_csv('~/Dropbox/1current/sRealm/local_data/IFYAH3130E_jitter_metadata.csv')
 
 meta <- meta %>% 
@@ -27,43 +27,86 @@ baseline_100 <- beta_dist_100 %>%
   nest(data = c(cYear, YEAR2, Jbeta, MH_dist)) %>% 
   mutate(Jac_lm = map(data, ~lm(.x$Jbeta ~ .x$cYear)),
          mh_lm = map(data, ~lm(.x$MH_dist ~ .x$cYear))) %>% 
-  ungroup()
-
-baseline_100_coefs <- baseline_100 %>% 
   mutate(Jac_lm_tidy = map(Jac_lm, broom::tidy),
          MH_lm_tidy = map(mh_lm, broom::tidy))
 
-baseline_100_coefs %>% 
+allYrs_100 <- beta_dist_100 %>% 
+  group_by(parameter_id, timeSeriesID) %>% 
+  mutate(c_temp_dist = temp_dist - mean(temp_dist)) %>% 
+  ungroup() %>% 
+  select(parameter_id, timeSeriesID, c_temp_dist, temp_dist, Jbeta, MH_dist) %>% 
+  nest(data = c(c_temp_dist, temp_dist, Jbeta, MH_dist)) %>% 
+  mutate(Jac_lm_allYrs = map(data, ~lm(.x$Jbeta ~ .x$c_temp_dist)),
+         mh_lm_allYrs = map(data, ~lm(.x$MH_dist ~ .x$c_temp_dist))) %>% 
+  mutate(Jac_lm_allYrs_tidy = map(Jac_lm_allYrs, broom::tidy),
+         MH_lm_allYrs_tidy = map(mh_lm_allYrs, broom::tidy))
+
+
+baseline_100 %>% 
   unnest(Jac_lm_tidy) %>% 
   filter(term=='(Intercept)') %>% 
   left_join(meta) %>% 
   ggplot() +
-  facet_wrap(~label, ncol = 4, scales = 'free') +
+  facet_wrap(~label, ncol = 4) +
   geom_histogram(aes(x = estimate)) +
   labs(x = 'Jaccard intercept (mean turnover magnitude)')
 
-baseline_100_coefs %>% 
+allYrs_100 %>% 
+  unnest(Jac_lm_allYrs_tidy) %>% 
+  filter(term=='(Intercept)') %>% 
+  left_join(meta) %>% 
+  ggplot() +
+  facet_wrap(~label, ncol = 4) +
+  geom_histogram(aes(x = estimate)) +
+  labs(x = 'Jaccard intercept (mean turnover magnitude)')
+
+baseline_100 %>% 
   unnest(Jac_lm_tidy) %>% 
   filter(term=='.x$cYear') %>% 
   left_join(meta) %>% 
   ggplot() +
-  facet_wrap(~label, ncol = 4, scales = 'free') +
+  facet_wrap(~label, ncol = 4) +
   geom_histogram(aes(x = estimate)) +
   labs(x = 'Jaccard slope (rate of turnover)',
        subtitle = 'Comparisons to initial assemblage')
 
-
-baseline_100_coefs %>% 
-  select(parameter_id, timeSeriesID) %>% 
-  
-  group_by()
-  unnest(data) %>% 
-  # filter(term=='.x$cYear') %>% 
+allYrs_100 %>% 
+  unnest(Jac_lm_allYrs_tidy) %>% 
+  filter(term=='.x$c_temp_dist') %>% 
   left_join(meta) %>% 
   ggplot() +
   facet_wrap(~label, ncol = 4) +
-  geom_point(aes(x = YEAR2, y = Jbeta, colour = timeSeriesID),
-             size = 0.5) +
-  # stat_smooth(method = 'lm', se = F,
-  #             aes(x = YEAR2, y = Jbeta, colour = timeSeriesID))
-  theme(legend.position = 'none')
+  geom_histogram(aes(x = estimate)) +
+  labs(x = 'Jaccard slope (rate of turnover)',
+       subtitle = 'Comparisons to initial assemblage')
+
+baseline_100 %>% 
+  unnest(Jac_lm_tidy) %>% 
+  filter(term=='.x$cYear') %>% 
+  left_join(meta) %>% 
+  left_join(duration) %>% 
+  ggplot() +
+  facet_wrap(~label, ncol = 4) +
+  geom_point(aes(x = duration, y = estimate),
+             size = 0.5, alpha = 0.25) +
+  stat_smooth(aes(x = duration, y = estimate),
+              se = F) +
+  labs(x = 'duration', 
+       y = 'Jaccard slope (rate of turnover)',
+       subtitle = 'Comparisons to initial assemblage')
+
+allYrs_100 %>% 
+  unnest(Jac_lm_allYrs_tidy) %>% 
+  filter(term=='.x$c_temp_dist') %>% 
+  left_join(meta) %>% 
+  left_join(duration) %>% 
+  ggplot() +
+  facet_wrap(~label, ncol = 4) +
+  geom_point(aes(x = duration, y = estimate),
+             size = 0.5, alpha = 0.25) +
+  stat_smooth(aes(x = duration, y = estimate),
+              se = F, size = 0.5) +
+  labs(x = 'duration', 
+       y = 'Jaccard slope (rate of turnover)',
+       subtitle = 'Comparisons to initial assemblage')
+
