@@ -27,6 +27,10 @@ duration <- beta_dist_100 %>%
 
 duration$ts_length <- factor(duration$ts_length,
                              levels = c('< 6', '6-10', '11-20', '21-50', '> 50'))
+
+ggplot() +
+  geom_bar(data = duration,
+                 aes(x = ts_length))
 # get alpha-scale univariate metrics (richness, total abundance, etc).
 # we are interested in biodiversity change, so we want ≥5 species (other criteria possibly desirable too)
 load('~/Dropbox/1current/sRealm/simRealm/simRealm/prelim_results/mobsim_alpha_metrics.Rdata')
@@ -263,7 +267,7 @@ left_join(jac_mh_coefs %>%
     filter(term=='.x$c_temp_dist' & S_POOL == 20) %>% 
     rename(jac_slope20 = jac_estimate,
            mh_slope20 = mh_estimate) %>% 
-      select(-parameter_id, timeSeriesID, term, jac_slope20, mh_slope20),
+      dplyr::select(-parameter_id, timeSeriesID, term, jac_slope20, mh_slope20),
   jac_mh_coefs %>% 
     filter(term=='.x$c_temp_dist' & S_POOL == 200) %>% 
     rename(jac_slope200 = jac_estimate,
@@ -271,7 +275,10 @@ left_join(jac_mh_coefs %>%
     select(-parameter_id, timeSeriesID, term, jac_slope200, mh_slope200),
   by = c('timeSeriesID', 'term')) %>% 
   ggplot() +
-  geom_point(aes(x = jac_slope200, y = jac_slope20))
+  geom_point(aes(x = jac_slope200, y = jac_slope20, colour = ts_length.x)) +
+  labs(x = 'jaccard slope (species pool = 200)',
+       y = 'jaccard slope (species pool = 20)',
+       subtitle = 'mobsim: compare turnover rate estimates when species pool differs in size')
 geom_point(aes(x = mh_slope200, y = mh_slope20))
   
 
