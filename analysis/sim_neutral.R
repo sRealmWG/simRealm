@@ -3,8 +3,8 @@ library(data.table)
 
 ## Parameter values ----
 ### Community
-source("./analysis/parameters/community_neutral_v1.r") # loads parameter_table
-outname <- 'v1'
+source("./analysis/parameters/community_neutral_v2.r") # loads parameter_table
+outname <- 'v2'
 
 
 ## Functions ----
@@ -38,6 +38,7 @@ tolong <- function(x, parameter_id = 1){
 
 ## Neutral simulations ----
 # Each replicate has a burnin and then a simulation period
+nrow(parameter_table)
 for(i in 1:nrow(parameter_table)){
   cat(i)
   nburn <- parameter_table$NBURN[i]*parameter_table$N[i] # number of burnin timesteps
@@ -83,7 +84,6 @@ for(i in 1:nrow(parameter_table)){
 nrow(out)
 
 ## Simulation metadata ----
-simulation_ID <- sRealmTools::create_random_ID(1L, seed = parameter_table$SEED[1]) #
 metadata <- data.table::as.data.table(parameter_table)
 metadata[, unique_id := simulation_ID]
 metadata[, date := Sys.time()]
@@ -92,5 +92,5 @@ metadata[, untb_version := as.character(utils::packageVersion("untb"))]
 data.table::setcolorder(metadata, neworder = c("unique_id","parameter_id", "simulation_function", "untb_version", "date"))
 
 # Saving results and metadata ----
-data.table::fwrite(out, file = paste0("./data/simulations/", simulation_ID, "_neutral_sim.csv"))
-data.table::fwrite(metadata, file = paste0("./data/simulations/", simulation_ID, "_neutral_metadata.csv"))
+data.table::fwrite(out, file = paste0("./data/simulations/neutral_sim_", outname, ".csv"))
+data.table::fwrite(metadata, file = paste0("./data/simulations/neutral_metadata", outname, ".csv"))
