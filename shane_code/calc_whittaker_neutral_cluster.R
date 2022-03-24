@@ -3,7 +3,8 @@
 options(tidyverse.quiet = TRUE)
 library(tidyverse)
 
-load('~/Dropbox/1current/sRealm/simRealm/data/time_series/neutral_time_series.Rdata')
+load('/data/idiv_chase/sablowes/simRealm/data/neutral_time_series.Rdata')
+# load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series.Rdata')
 # load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid-25-48.Rdata')
 
 # separate each of the subsamples and nest all time steps for a given timeSeriesID
@@ -15,21 +16,21 @@ neutral_ss100 <- neutral_local_ts %>%
   ungroup() %>% 
   select(parameter_id, timeSeriesID,  data)
 
-neutral_ss50 <- neutral_local_ts %>% 
-  unnest(ss50) %>% 
-  select(parameter_id, timeSeriesID,  timestep, species, N) %>% 
-  group_by(parameter_id, timeSeriesID) %>% 
-  nest(data = c(timestep, species, N)) %>% 
-  ungroup() %>% 
-  select(parameter_id, timeSeriesID,  data)
-
-neutral_ss10 <- neutral_local_ts %>% 
-  unnest(ss10) %>% 
-  select(parameter_id, timeSeriesID,  timestep, species, N) %>% 
-  group_by(parameter_id, timeSeriesID) %>% 
-  nest(data = c(timestep, species, N)) %>% 
-  ungroup() %>% 
-  select(parameter_id, timeSeriesID,  data)
+# neutral_ss50 <- neutral_local_ts %>% 
+#   unnest(ss50) %>% 
+#   select(parameter_id, timeSeriesID,  timestep, species, N) %>% 
+#   group_by(parameter_id, timeSeriesID) %>% 
+#   nest(data = c(timestep, species, N)) %>% 
+#   ungroup() %>% 
+#   select(parameter_id, timeSeriesID,  data)
+# 
+# neutral_ss10 <- neutral_local_ts %>% 
+#   unnest(ss10) %>% 
+#   select(parameter_id, timeSeriesID,  timestep, species, N) %>% 
+#   group_by(parameter_id, timeSeriesID) %>% 
+#   nest(data = c(timestep, species, N)) %>% 
+#   ungroup() %>% 
+#   select(parameter_id, timeSeriesID,  data)
 
 # initialise storage
 beta_Whittaker_100_allYears <- tibble() 
@@ -37,6 +38,7 @@ beta_Whittaker_100_yrPairs <- tibble()
 
 
 for(i in 1:nrow(neutral_ss100)){
+  print(paste('parameter_id ', i, 'of ', length(unique(neutral_ss100$parameter_id))))
     # long data
   comm_long = neutral_ss100 %>% 
     slice(i) %>% 
@@ -71,10 +73,10 @@ for(i in 1:nrow(neutral_ss100)){
                             factor = 1)
   
   betaC_est_allYrs = try(betaC::beta_C(x = comm_wide[,-1],
-                                C = Ctarget,
+                                C = Ctarget_allYrs,
                                 extrapolation = FALSE, interrupt = FALSE))
   
-  beta_allYears_temp = left_join(alpha_bar, gamma_allYears) %>% 
+  beta_allYears_temp = left_join(alpha_bar_allYrs, gamma_allYears) %>% 
     mutate(beta_S = gS / aS_bar,
            beta_S_PIE = gS_PIE / aS_PIE_bar,
            beta_C = ifelse(class(betaC_est_allYrs)!='numeric', yes = NA, no = betaC_est_allYrs[[1]]),
@@ -89,8 +91,8 @@ for(i in 1:nrow(neutral_ss100)){
   whittaker_temp = tibble()
   for(j in 1:nrow(yr_pairs)){
     # counter for sanity
-    print(paste('calculation ', i, 'of ', nrow(neutral_ss100)))
-    print(paste(j, ' year pair of ', nrow(yr_pairs)))
+    # print(paste('parameter_id ', i, 'of ', length(unique(neutral_ss100$parameter_id))))
+    # print(paste(j, ' year pair of ', nrow(yr_pairs)))
     
     get_years = yr_pairs[j,]
     
@@ -145,3 +147,6 @@ for(i in 1:nrow(neutral_ss100)){
   beta_Whittaker_100_yrPairs = bind_rows(beta_Whittaker_100_yrPairs,
                                          whittaker_temp)
 }
+
+save(beta_Whittaker_100_allYears,
+     beta_Whittaker_100_yrPairs, file = Sys.getenv('OFILE'))
