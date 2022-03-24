@@ -3,7 +3,7 @@ library(tidyverse)
 task = as.integer(Sys.getenv("SLURM_ARRAY_TASK_ID"))
 input_file = paste0('/data/idiv_chase/sablowes/simRealm/data/neutral-ts/parameter_id-1-ts', task,'.csv')
 input_file = paste0('~/Dropbox/1current/sRealm/local_data/neutral-ts/parameter_id-1-ts', 2, '.csv')
-dat = read_csv(input_file)
+dat = data.table::fread(input_file)
 
 # initialise storage
 beta_Whittaker_100_allYears <- tibble() 
