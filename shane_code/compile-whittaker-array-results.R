@@ -44,4 +44,4 @@ for(par_id in 1:length(parameter_id)){
   
 save(whittaker_allYrs_100, 
      whittaker_yrPairs_100, 
-     ts_check, file = 'neutral-whittaker-beta-time.Rdata')
+     ts_count, file = 'neutral-whittaker-beta-time.Rdata')

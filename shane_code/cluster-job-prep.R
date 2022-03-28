@@ -2,9 +2,8 @@
 
 library(tidyverse)
 
-load('/data/idiv_chase/sablowes/simRealm/data/neutral_time_series.Rdata')
-# load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series.Rdata')
-# load('~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid-25-48.Rdata')
+
+load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series.Rdata')
 
 # separate each of the subsamples and nest all time steps for a given timeSeriesID
 neutral_ss100 <- neutral_local_ts %>% 
@@ -22,6 +21,32 @@ for(i in 1:nrow(neutral_ss100)){
   
   file_name = paste0('parameter_id-', temp$parameter_id, '-', temp$timeSeriesID, '.csv')
   dir = '~/Dropbox/1current/sRealm/local_data/neutral-ts/'
+  
+  temp %>% 
+    unnest(cols = data) %>% 
+    write_csv(., file = paste0(dir,file_name))
+  
+}
+
+# prepare mobsim data for calculating whittaker on cluster
+load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/timeSeries_site55_pid-1-24.Rdata')
+
+# separate each of the subsamples and nest all time steps for a given timeSeriesID
+ss100_s55 <- site55 %>% 
+  unnest(ss100) %>% 
+  select(parameter_id, timeSeriesID, quadrat_id, timestep, species, N) %>% 
+  group_by(parameter_id, timeSeriesID, quadrat_id) %>% 
+  nest(data = c(timestep, species, N)) %>% 
+  ungroup() %>% 
+  select(parameter_id, timeSeriesID, quadrat_id, data)
+
+
+for(i in 1:nrow(ss100_s55)){
+  temp = ss100_s55 %>% 
+    slice(i) 
+  
+  file_name = paste0('parameter_id-', temp$parameter_id, '-', temp$timeSeriesID, '.csv')
+  dir = '~/Dropbox/1current/sRealm/local_data/mobsim-ts/'
   
   temp %>% 
     unnest(cols = data) %>% 

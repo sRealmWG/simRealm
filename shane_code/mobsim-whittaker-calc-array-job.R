@@ -1,8 +1,11 @@
-library(tidyverse)
+withr::with_libpaths(new = '/home/blowes/R/x86_64-pc-linux-gnu-library/foss-2019b-R-3.6.2-2/', library(tidyr))
+
+withr::with_libpaths(new = '/home/blowes/R/x86_64-pc-linux-gnu-library/foss-2019b-R-3.6.2-2/', library(dplyr))
 
 task = as.integer(Sys.getenv("SLURM_ARRAY_TASK_ID"))
-input_file = paste0('/data/idiv_chase/sablowes/simRealm/data/neutral-ts/parameter_id-12-ts', task,'.csv')
-# input_file = paste0('~/Dropbox/1current/sRealm/local_data/neutral-ts/parameter_id-1-ts1.csv')
+
+input_file = paste0('/data/idiv_chase/sablowes/simRealm/data/mobsim-ts/parameter_id-1-ts', task,'.csv')
+# input_file = paste0('~/Dropbox/1current/sRealm/local_data/mobsim-ts/parameter_id-1-ts1.csv')
 
 dat = data.table::fread(input_file)
 
@@ -14,26 +17,26 @@ beta_Whittaker_100_yrPairs <- tibble()
 
 # first, Whittaker at the scale of the whole time series
 alpha_bar_allYrs = dat %>% 
-  group_by(parameter_id, timeSeriesID, timestep) %>% 
+  group_by(parameter_id, timeSeriesID, quadrat_id, timestep) %>% 
   summarise(S = length(unique(species)),
-            S_PIE = mobr::calc_SPIE(n)) %>% 
-  group_by(parameter_id, timeSeriesID) %>% 
+            S_PIE = mobr::calc_SPIE(N)) %>% 
+  group_by(parameter_id, timeSeriesID, quadrat_id) %>% 
   summarise(aS_bar = mean(S),
             aS_PIE_bar = mean(S_PIE)) %>% 
   ungroup()
 
 gamma_allYears = dat %>% 
-  group_by(parameter_id, timeSeriesID, species) %>% 
-  summarise(N = sum(n)) %>% 
-  group_by(parameter_id, timeSeriesID) %>% 
+  group_by(parameter_id, timeSeriesID, quadrat_id, species) %>% 
+  summarise(N = sum(N)) %>% 
+  group_by(parameter_id, timeSeriesID, quadrat_id) %>% 
   summarise(gS = length(unique(species)),
             gS_PIE = mobr::calc_SPIE(N)) %>% 
   ungroup()
 
 comm_wide = dat %>% 
-  dplyr::select(-parameter_id, -timeSeriesID) %>% 
+  dplyr::select(-parameter_id, -timeSeriesID, -quadrat_id) %>% 
   pivot_wider(names_from = species,
-              values_from = n,
+              values_from = N,
               values_fill = 0)
 
 Ctarget_allYrs = betaC::C_target(comm_wide[,-1], 
@@ -67,15 +70,15 @@ for(j in 1:nrow(yr_pairs)){
     filter(timestep %in% get_years)
   
   years_wide = years %>% 
-    dplyr::select(-parameter_id, -timeSeriesID) %>% 
+    dplyr::select(-parameter_id, -timeSeriesID, -quadrat_id) %>% 
     tidyr::pivot_wider(names_from = species,
-                       values_from = n,
+                       values_from = N,
                        values_fill = 0)
   
   gamma_pair = years %>% 
-    group_by(parameter_id, timeSeriesID, species) %>% 
-    summarise(N = sum(n)) %>% 
-    group_by(parameter_id, timeSeriesID) %>% 
+    group_by(parameter_id, timeSeriesID, quadrat_id, species) %>% 
+    summarise(N = sum(N)) %>% 
+    group_by(parameter_id, timeSeriesID, quadrat_id) %>% 
     summarise(gS = length(unique(species)),
               gS_PIE = mobr::calc_SPIE(N)) %>% 
     ungroup()
@@ -88,15 +91,13 @@ for(j in 1:nrow(yr_pairs)){
                                 extrapolation = FALSE, interrupt = FALSE))
   
   alpha_bar = years %>% 
-    group_by(parameter_id, timeSeriesID, timestep) %>% 
+    group_by(parameter_id, timeSeriesID, quadrat_id, timestep) %>% 
     summarise(aS = length(unique(species)),
-              aS_PIE = mobr::calc_SPIE(n)) %>% 
-    group_by(parameter_id, timeSeriesID) %>% 
+              aS_PIE = mobr::calc_SPIE(N)) %>% 
+    group_by(parameter_id, timeSeriesID, quadrat_id) %>% 
     summarise(aS_bar = mean(aS),
               aS_PIE_bar = mean(aS_PIE)) %>% 
     ungroup() 
-  
-  
   
   temp = left_join(alpha_bar, gamma_pair) %>% 
     mutate(YEAR1 = yr_pairs[j,1],
