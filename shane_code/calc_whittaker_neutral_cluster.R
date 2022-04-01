@@ -49,7 +49,7 @@ for(i in 1:nrow(neutral_ss100)){
   alpha_bar_allYrs = comm_long %>% 
     group_by(parameter_id, timeSeriesID, timestep) %>% 
     summarise(S = length(unique(species)),
-              S_PIE = mobr::calc_SPIE(n)) %>% 
+              S_PIE = vegan::diversity(n, index = 'invsimpson')) %>% 
     group_by(parameter_id, timeSeriesID) %>% 
     summarise(aS_bar = mean(S),
               aS_PIE_bar = mean(S_PIE)) %>% 
@@ -60,7 +60,7 @@ for(i in 1:nrow(neutral_ss100)){
     summarise(N = sum(n)) %>% 
     group_by(parameter_id, timeSeriesID) %>% 
     summarise(gS = length(unique(species)),
-              gS_PIE = mobr::calc_SPIE(N)) %>% 
+              gS_PIE = vegan::diversity(N, index = 'invsimpson')) %>% 
     ungroup()
   
   comm_wide = comm_long %>% 
@@ -110,7 +110,7 @@ for(i in 1:nrow(neutral_ss100)){
       summarise(N = sum(n)) %>% 
       group_by(parameter_id, timeSeriesID) %>% 
       summarise(gS = length(unique(species)),
-                gS_PIE = mobr::calc_SPIE(N)) %>% 
+                gS_PIE = vegan::diversity(N, index = 'invsimpson')) %>% 
       ungroup()
     
     Ctarget = betaC::C_target(years_wide[,-1], 
@@ -125,7 +125,7 @@ for(i in 1:nrow(neutral_ss100)){
     alpha_bar = years %>% 
       group_by(parameter_id, timeSeriesID, timestep) %>% 
       summarise(aS = length(unique(species)),
-                aS_PIE = mobr::calc_SPIE(n)) %>% 
+                aS_PIE = vegan::diversity(n, index = 'invsimpson')) %>% 
       group_by(parameter_id, timeSeriesID) %>% 
       summarise(aS_bar = mean(aS),
              aS_PIE_bar = mean(aS_PIE)) %>% 
