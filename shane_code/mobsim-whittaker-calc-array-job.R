@@ -57,6 +57,7 @@ beta_Whittaker_100_allYears = bind_rows(beta_Whittaker_100_allYears,
                                         beta_allYears_temp)
 
 # now, do for all year pairs
+# TODO: check if this is giving each pair twice?!
 yr_pairs <- t(combn(unique(dat$timestep), 2))
 whittaker_temp = tibble()
 for(j in 1:nrow(yr_pairs)){
