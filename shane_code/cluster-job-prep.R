@@ -29,7 +29,7 @@ for(i in 1:nrow(neutral_ss100)){
 }
 
 # prepare mobsim data for calculating whittaker on cluster
-load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/timeSeries_site55_pid-1-24.Rdata')
+load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/mobsim_timeSeries_site55_pid-1-24.Rdata')
 
 # separate each of the subsamples and nest all time steps for a given timeSeriesID
 ss100_s55 <- site55 %>% 

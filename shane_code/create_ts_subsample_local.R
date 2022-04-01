@@ -2,10 +2,11 @@
 
 library(tidyverse)
 
+# v1: random walk movement
 dat <- read_csv('~/Dropbox/1current/sRealm/local_data/IFYAH3130E_jitter_sim.csv')
 meta1 <- read_csv('~/Dropbox/1current/sRealm/local_data/IFYAH3130E_jitter_metadata.csv')
 
-
+# directed movement (non-random)
 dat <- read_csv('~/Dropbox/simRealm/data/simulations/CXYAB2252T_steps_sim.csv')
 meta1 <- read_csv('~/Dropbox/1current/sRealm/simRealm/simRealm/data/simulations/mobsim/CXYAB2252T_steps_metadata.csv')
 
