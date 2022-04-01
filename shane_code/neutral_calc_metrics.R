@@ -3,7 +3,7 @@
 library(tidyverse)
 
 # load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series.Rdata')
-load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series_v2.Rdata')
+# load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series_v2.Rdata')
 
 # separate each of the subsamples and nest all time steps for a given timeSeriesID
 neutral_ss100 <- neutral_local_ts %>% 
@@ -31,7 +31,7 @@ neutral_ss10 <- neutral_local_ts %>%
   select(parameter_id, timeSeriesID,  data)
 
 # initialise storage
-alpha_scale_100 <- tibble()
+neutral_alpha_scale_100 <- tibble()
 beta_dist_100 <- tibble() # dissimilarity
 
 for(i in 1:nrow(neutral_ss100)){
@@ -86,11 +86,11 @@ for(i in 1:nrow(neutral_ss100)){
            timeSeriesID = unique(comm_long$timeSeriesID))
 
   beta_dist_100 = bind_rows(beta_dist_100, all_pairs)
-  alpha_scale_100 = bind_rows(alpha_scale_100, alpha_temp)
+  neutral_alpha_scale_100 = bind_rows(neutral_alpha_scale_100, alpha_temp)
 }
 
 # repeat for 50 subsample
-alpha_scale_50 <- tibble()
+neutral_alpha_scale_50 <- tibble()
 beta_dist_50 <- tibble() 
 for(i in 1:nrow(neutral_ss50)){
   # counter for sanity
@@ -144,12 +144,12 @@ for(i in 1:nrow(neutral_ss50)){
            timeSeriesID = unique(comm_long$timeSeriesID))
 
   beta_dist_50 = bind_rows(beta_dist_50, all_pairs)
-  alpha_scale_50 = bind_rows(alpha_scale_50, alpha_temp)
+  neutral_alpha_scale_50 = bind_rows(neutral_alpha_scale_50, alpha_temp)
 }
 
 
 # repeat for 10% subsample
-alpha_scale_10 <- tibble()
+neutral_alpha_scale_10 <- tibble()
 beta_dist_10 <- tibble() 
 for(i in 1:nrow(neutral_ss10)){
   # counter for sanity
@@ -223,7 +223,7 @@ for(i in 1:nrow(neutral_ss10)){
 
   }
   beta_dist_10 = bind_rows(beta_dist_10, all_pairs)
-  alpha_scale_10 = bind_rows(alpha_scale_10, alpha_temp)
+  neutral_alpha_scale_10 = bind_rows(neutral_alpha_scale_10, alpha_temp)
 }
 
 
@@ -236,11 +236,12 @@ beta_dist_50 <- beta_dist_50 %>%
 beta_dist_100 <- beta_dist_100 %>% 
   mutate(temp_dist = YEAR2 - YEAR1)
 
-save(alpha_scale_10,
-     alpha_scale_50,
-     alpha_scale_100,
-     file = '~/Dropbox/1current/sRealm/local_data/neutral_local_metrics_alpha_beta_dist.Rdata')
 
-write.csv(beta_dist_100, file = '~/Dropbox/1current/sRealm/simRealm/simRealm/prelim_results/neutral_v2_beta_dist_100.csv')
+save(neutral_alpha_scale_10,
+     neutral_alpha_scale_50,
+     neutral_alpha_scale_100,
+     file = '~/Dropbox/1current/sRealm/simRealm/simRealm/prelim_results/neutral_local_metrics_alpha.Rdata')
+
+write.csv(beta_dist_100, file = '~/Dropbox/1current/sRealm/local_data/prelim_results/neutral_v2_beta_dist_100.csv')
 write.csv(beta_dist_50, file = '~/Dropbox/1current/sRealm/local_data/neutral_v2_beta_dist_50.csv')
-write.csv(beta_dist_10, file = '~/Dropbox/1current/sRealm/simRealm/prelim_results/neutral_v2_beta_dist_10.csv')
+write.csv(beta_dist_10, file = '~/Dropbox/1current/sRealm/local_data/neutral_v2_beta_dist_10.csv')

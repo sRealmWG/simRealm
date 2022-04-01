@@ -3,7 +3,7 @@
 library(tidyverse)
 
 # v1: random walk
-# load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/mobsim_timeSeries_site55_pid-1-24.Rdata')
+load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/timeSeries_site55_pid-1-24.Rdata')
 # v2: directed movement
 load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/mobsim_v2_timeSeries_site55_pid-1-24.Rdata')
 
