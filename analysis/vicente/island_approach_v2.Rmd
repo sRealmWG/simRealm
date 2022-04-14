@@ -1,0 +1,206 @@
+---
+title: "Time-series analysis - T_c approach"
+output:
+  pdf_document: default
+  html_notebook: default
+editor_options:
+  chunk_output_type: inline
+---
+
+## Take-home messages.
+
+1. I have trouble making sense of these results. An explanation might be that there are few colonization and extinction events, thus compositional change is slow. Maybe increasing drift (movement) in mobsim we could have faster change. 
+2. In the neutral simulations, it seems that there is not much change and it is slow. Sampling should be less frequent (I think Malin samples each 0.5 generations -> maybe we could go to each 3?) and I would change THETA and N so that there are less individuals per species (making those closer). 
+
+<!-- 1. Compositional change is too fast in the simulations.  -->
+<!-- 2. Some combinations of parameters are too extreme (20 sp. 20000 individuals, or 200 species 2000 individuals). -->
+<!-- 3. If we do not take into account our previous knowledge of the species pool, colonization-extinction rates become biased at small durations and, so, the $T_c$ approach. However, the estimator is asymptotically unbiased and effective, meaning that converges fast to the unbiased estimates (using our knowledge of the species pool). LONG TIME-SERIES ARE LESS BIASED. -->
+
+# Mobsim drift simulation.
+
+### Loading the data
+
+```{r}
+
+library(tidyverse)
+
+metadata <- read.csv("../../data/simulations/mobsim/CXYAB2252T_steps_metadata.csv")
+load("estimates_mobsim_v2.RData")
+
+tst_w_metadata <- inner_join(metadata, tst)
+
+# tst_w_metadata <- tst_w_metadata %>% mutate(facet = paste0("SP: ", S_POOL, " N: ", N_SIM,
+#                                          " SAD: ", SAD_COEF, " SIGMA : ", SIGMA))
+
+tst_w_metadata <- tst_w_metadata %>% mutate(facet = paste0(S_POOL, "-", N_SIM,
+                                                           "-", SAD_COEF, "-", SIGMA))
+```
+
+ \newpage
+ 
+## $T_c$ plots
+
+Remember that $T_c$ measures how fast communities change. It's difficult to see differences here. Its value tends to 60 or so (which is quite slow).
+
+
+```{r, fig.height=6}
+ggplot(tst_w_metadata, aes(x = Duration, y = raw_T_c)) + geom_point() +
+   facet_wrap(~facet, ncol = 4) +
+   ggtitle("Characteristic time - raw") +
+   geom_smooth() + scale_y_log10()
+```
+
+We see bias above. This is so because I used the observed species pool in the timeseries. What happens if we use our knowledge of the number of species in the pool?
+
+```{r, fig.height=6}
+ggplot(tst_w_metadata, aes(x = Duration, y = T_c)) + geom_point() +
+    facet_wrap(~facet, ncol = 4) +
+   ggtitle("Characteristic time - complete species pool") +
+   geom_smooth()  + scale_y_log10() 
+```
+If we use our knowledge of the species pool, we get less biased estimates of $T_c$. 
+
+\newpage
+
+## Asymptotic Jaccard
+
+Asymptotic Jaccard corresponds to the expected Jaccard dissimilarity between two samples far in time, that is, effectively independent. It is difficult to interpret any of this results. Most results tended to either full or 0 dissimilarity. There are 3 parameter combinations that, however biased using the raw measures, produce unbiased estimators taking into account the number of species in the pool. These are 200-20000-X-10 (S_POOL - N_SIM - SAD - SIGMA).
+
+```{r, fig.height=6}
+ggplot(tst_w_metadata, aes(x = Duration, y = raw_a_j)) + geom_point() +
+   facet_wrap(~facet, scales = "free_y", ncol = 4) +
+   ggtitle("Asymptotic Jaccard - raw") +
+   geom_smooth()
+```
+
+
+```{r, fig.height=6}
+ggplot(tst_w_metadata, aes(x = Duration, y = a_j)) + geom_point() +
+   facet_wrap(~facet, scales = "free_y", ncol = 4) +
+   ggtitle("Asymptotic Jaccard - complete species pool") +
+   geom_smooth()
+```
+
+\newpage
+
+## Other measures
+
+### Halving time
+Akin to Helmut's half-saturation. It's quite slow.
+
+```{r, fig.height=6}
+ggplot(tst_w_metadata, aes(x = Duration, y = raw_h_t)) + geom_point() +
+   facet_wrap(~facet, scales = "free_y", ncol = 4) +
+   ggtitle("Halving time - raw") +
+   geom_smooth() + scale_y_log10()
+```
+
+\newpage
+
+### Affinity
+Akin to Helmut's approach. It is less biased than other measures. All values seem very low here. Also, we get unbiased estimates for 200-20000-X-10.
+
+```{r, fig.height=6}
+ggplot(tst_w_metadata, aes(x = Duration, y = raw_Affinity)) + geom_point() +
+   facet_wrap(~facet, scales = "free_y", ncol = 4) +
+   ggtitle("Affinity - raw") +
+   geom_smooth()
+```
+
+\newpage
+
+### Jaccard at the Characteristic time.
+Indicates dissimilarity at short time-scales.
+
+```{r, fig.height=6}
+ggplot(tst_w_metadata, aes(x = Duration, y = raw_J_t_c)) + geom_point() +
+   facet_wrap(~facet, scales = "free_y", ncol = 4) +
+   ggtitle("Jaccard at the Characteristic Time - raw") +
+   geom_smooth()
+```
+\newpage
+
+# Neutral simulations
+
+## Load data
+
+```{r}
+metadata <- read.csv("../../data/simulations/neutral_metadata_v2.csv")
+load("estimates_neutral_v2.RData")
+
+neutral_w_metadata <- inner_join(metadata, neutral)
+
+neutral_w_metadata <- neutral_w_metadata %>% mutate(facet = paste0(THETA, "-", M,
+                                                           "-", N))
+```
+
+## Characteristic time
+
+Here we get a high characteristic time, so change is slow. We have few colonizations, extinctions, and recolonizations. In this case, we have biased estimators as we do not know the number of species in the pool (even the initialization of the simulations is stochastic). The value tends to 65. Maybe sampling less (maybe a sixth of what we are doing now) would help us see some differences. 
+
+```{r}
+ggplot(neutral_w_metadata, aes(x = Duration, y = raw_T_c)) + geom_point() +
+      facet_wrap(~ facet, scales = "free_y", ncol = 4) +
+   ggtitle("Characteristic Time - raw") +
+   geom_smooth() + scale_y_log10()
+   # scale_y_continuous(limits = c(0, 100))
+```
+
+
+But I think that sampling every half generation (.5/m as I think is happening at the moment) we are effectively collapsing all the duration Vs T_c plots together. Still, there's quite a bit of variation here.
+
+```{r}
+ggplot(neutral_w_metadata, aes(x = Duration, y = raw_T_c, color = facet)) + geom_point() +
+      # facet_wrap(~ facet, scales = "free_y", ncol = 4) +
+   ggtitle("Characteristic Time - collapsing all parameter_id") +
+   # geom_smooth() + scale_y_log10()
+   scale_y_continuous(limits = c(0, 100))
+```
+\newpage
+
+## Asymptotic Jaccard
+
+It seems that the chosen parameters lead to small dissimilarity. Maybe we need to see a bit more of change. It could be done 1) increasing m (but I'm not so sure if that implies the entry of a species absent from the community or if it is drawn from the regional distribution, which would produce a different result), or 2) making theta and N closer (so that there are less individuals for species).
+
+```{r}
+ggplot(neutral_w_metadata, aes(x = Duration, y = raw_a_j)) + geom_point() +
+   facet_wrap(~ facet, scales = "free_y", ncol = 4) +
+   ggtitle("Asymptotic Jaccard - raw") +
+   geom_smooth()
+```
+
+
+```{r}
+ggplot(neutral_w_metadata, aes(x = Duration, y = raw_a_j, color = facet)) + geom_point() +
+   # facet_wrap(~ facet, scales = "free_y", ncol = 4) +
+   ggtitle("Asymptotic Jaccard - collapsing parameter_id") 
+```
+
+\newpage
+
+## Other measures
+
+### Affinity
+
+The neutral model has produced small affinities. 
+
+```{r}
+ggplot(neutral_w_metadata, aes(x = Duration, y = raw_Affinity)) + geom_point() +
+   facet_wrap(~ facet, scales = "free_y", ncol = 4) +
+   ggtitle("Affinity - raw") +
+   geom_smooth()
+```
+
+
+```{r}
+ggplot(neutral_w_metadata, aes(x = Duration, y = raw_Affinity, color = facet)) + geom_point() +
+   # facet_wrap(~ facet, scales = "free_y", ncol = 4) +
+   ggtitle("Affinity - collapsing parameter_id") 
+```
+
+
+<!-- Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*. -->
+
+<!-- When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file). -->
+
+<!-- The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed. -->
