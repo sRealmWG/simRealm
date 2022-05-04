@@ -2,7 +2,7 @@
 
 ## Parameter values ----
 ### Community
-source("./analysis/parameters/community_v3.r")
+source("./analysis/parameters/community_v4.r")
 
 ### Iterations
 nyears <- 600L
@@ -11,11 +11,12 @@ nyears <- 600L
 seed <- 42L
 
 # Running the simulations ----
-simulation_ID <- sRealmTools::create_random_ID()
-source("./functions/simulations_v7_jitter_future.R", local = FALSE)
+# simulation_ID <- sRealmTools::create_random_ID()
+simulation_ID <- Sys.Date()
+source("./functions/simulations_v8_steps_future.R", local = FALSE)
 
 beginning <- Sys.time()
-res <- simulation_v7_jitter_future(nyears = nyears, strategy = "multisession", seed = seed, simulation_ID = simulation_ID)
+res <- simulation_v8_steps_future(nyears = nyears, strategy = "batchtools_slurm", seed = seed, simulation_ID = simulation_ID)
 Sys.time() - beginning
 
 # Reading the simulations ----
@@ -41,6 +42,7 @@ dt <- data.table::rbindlist(dt, idcol = TRUE)
 dt[, rn := as.factor(rn)]
 data.table::setnames(dt, 1L:3L, c("parameter_id", "timestep", "quadrat_id"))
 data.table::setcolorder(dt, neworder = c("parameter_id", "quadrat_id", "timestep"))
+data.table::setorder(dt, parameter_id, timestep, species)
 
 # Simulation metadata ----
 metadata <- data.table::as.data.table(parameter_table)
@@ -48,8 +50,8 @@ metadata[, parameter_id := seq_len(nrow(metadata))]
 metadata[, unique_id := simulation_ID]
 metadata[, date := Sys.time()]
 metadata[, seed := seed]
-metadata[, simulation_function := "simulations_v6"]
-metadata[, parameter_set := "community_v3"]
+metadata[, simulation_function := "simulations_v8_steps_future"]
+metadata[, parameter_set := "community_v4"]
 metadata[, sRealmTools_version := as.character(utils::packageVersion("sRealmTools"))]
 metadata[, mobsim_version := as.character(utils::packageVersion("mobsim"))]
 
@@ -62,4 +64,4 @@ data.table::fwrite(metadata, file = paste0("./data/simulations/mobsim/", simulat
 Sys.time() - beginning
 
 # empty samples?
-if (any(dt[, length(unique(timestep)) != nyears, by = parameter_id])) warning("Some samples were empty and do not appear in the results.")
+# if (any(dt[, length(unique(timestep)) != nyears, by = parameter_id])) warning("Some samples were empty and do not appear in the results.")
