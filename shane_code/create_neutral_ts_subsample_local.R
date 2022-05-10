@@ -49,12 +49,14 @@ expand_subsample <- function(neutral_data, fraction){
 # subsample one quadrat only
 neutral_local_ts = neutral_dat_ts %>% 
   mutate(#ss100 = map2(.x = neutral_data, .y = 1, .f = ~expand_subsample(.x, .y)),
+    ss75 = map2(.x = neutral_data, .y = 0.75, .f = possibly(~expand_subsample(.x, .y), otherwise = NULL)),
     ss50 = map2(.x = neutral_data, .y = 0.5, .f = possibly(~expand_subsample(.x, .y), otherwise = NULL)),
+    ss25 = map2(.x = neutral_data, .y = 0.25, .f = possibly(~expand_subsample(.x, .y), otherwise = NULL)),
     ss10 = map2(.x = neutral_data, .y = 0.1, .f = possibly(~expand_subsample(.x, .y), otherwise = NULL))) %>% 
   rename(ss100 = neutral_data)
 
 # save 
 save(duration, 
      neutral_local_ts,
-     file = '~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series_v2.Rdata')
+     file = '~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series_v2_extraSubsamples.Rdata')
 
