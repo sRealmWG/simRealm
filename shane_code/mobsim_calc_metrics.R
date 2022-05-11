@@ -6,10 +6,19 @@ library(tidyverse)
 load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/timeSeries_site55_pid-1-24.Rdata')
 # v2: directed movement
 load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/mobsim_v2_timeSeries_site55_pid-1-24.Rdata')
+load('/data/idiv_chase/simRealm/')
 
 # separate each of the subsamples and nest all time steps for a given timeSeriesID
 ss100_s55 <- site55 %>% 
   unnest(ss100) %>% 
+  select(parameter_id, timeSeriesID, quadrat_id, timestep, species, N) %>% 
+  group_by(parameter_id, timeSeriesID, quadrat_id) %>% 
+  nest(data = c(timestep, species, N)) %>% 
+  ungroup() %>% 
+  select(parameter_id, timeSeriesID, quadrat_id, data)
+
+ss75_s55 <- site55 %>% 
+  unnest(ss75) %>% 
   select(parameter_id, timeSeriesID, quadrat_id, timestep, species, N) %>% 
   group_by(parameter_id, timeSeriesID, quadrat_id) %>% 
   nest(data = c(timestep, species, N)) %>% 
@@ -33,7 +42,7 @@ ss10_s55 <- site55 %>%
   select(parameter_id, timeSeriesID, quadrat_id, data)
 
 # initialise storage
-alpha_scale_100 <- tibble()
+# alpha_scale_100 <- tibble()
 beta_dist_100 <- tibble() # dissimilarity
 
 for(i in 1:nrow(ss100_s55)){
@@ -46,13 +55,13 @@ for(i in 1:nrow(ss100_s55)){
     unnest(data) %>% 
     arrange(-desc(timestep))
   
-  alpha_temp <- comm_long %>% 
-    group_by(parameter_id, timeSeriesID, timestep) %>% 
-    summarise(S = n_distinct(species),
-              S_PIE = vegan::diversity(N, index = 'invsimpson'),
-              N_all = sum(N),
-              C_hat = mobr::Chat(N, N_all)) %>% 
-    ungroup()
+  # alpha_temp <- comm_long %>% 
+  #   group_by(parameter_id, timeSeriesID, timestep) %>% 
+  #   summarise(S = n_distinct(species),
+  #             S_PIE = vegan::diversity(N, index = 'invsimpson'),
+  #             N_all = sum(N),
+  #             C_hat = mobr::Chat(N, N_all)) %>% 
+  #   ungroup()
   
   comm_wide = comm_long %>%
     dplyr::select(-parameter_id, -timeSeriesID) %>%
@@ -88,7 +97,7 @@ for(i in 1:nrow(ss100_s55)){
            timeSeriesID = unique(comm_long$timeSeriesID))
 
   beta_dist_100 = bind_rows(beta_dist_100, all_pairs)
-  alpha_scale_100 = bind_rows(alpha_scale_100, alpha_temp)
+  # alpha_scale_100 = bind_rows(alpha_scale_100, alpha_temp)
 }
 
 # repeat for 50 subsample
