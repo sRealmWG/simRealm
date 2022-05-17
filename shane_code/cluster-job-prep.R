@@ -15,6 +15,14 @@ neutral_ss100 <- neutral_local_ts %>%
   ungroup() %>% 
   select(parameter_id, timeSeriesID,  data)
 
+neutral_ss75 <- neutral_local_ts %>% 
+  unnest(ss75) %>% 
+  select(parameter_id, timeSeriesID,  timestep, species, N) %>% 
+  group_by(parameter_id, timeSeriesID) %>% 
+  nest(data = c(timestep, species, N)) %>% 
+  ungroup() %>% 
+  select(parameter_id, timeSeriesID,  data)
+
 neutral_ss50 <- neutral_local_ts %>% 
   unnest(ss50) %>% 
   select(parameter_id, timeSeriesID,  timestep, species, N) %>% 
@@ -23,12 +31,75 @@ neutral_ss50 <- neutral_local_ts %>%
   ungroup() %>% 
   select(parameter_id, timeSeriesID,  data)
 
+neutral_ss25 <- neutral_local_ts %>% 
+  unnest(ss25) %>% 
+  select(parameter_id, timeSeriesID,  timestep, species, N) %>% 
+  group_by(parameter_id, timeSeriesID) %>% 
+  nest(data = c(timestep, species, N)) %>% 
+  ungroup() %>% 
+  select(parameter_id, timeSeriesID,  data)
+
+neutral_ss10 <- neutral_local_ts %>% 
+  unnest(ss10) %>% 
+  select(parameter_id, timeSeriesID,  timestep, species, N) %>% 
+  group_by(parameter_id, timeSeriesID) %>% 
+  nest(data = c(timestep, species, N)) %>% 
+  ungroup() %>% 
+  select(parameter_id, timeSeriesID,  data)
+
+for(i in 1:nrow(neutral_ss75)){
+  temp = neutral_ss75 %>% 
+    slice(i) 
+  
+  print(paste(i, ' of ', nrow(neutral_ss75)))
+  
+  file_name = paste0('parameter_id-', temp$parameter_id, '-', temp$timeSeriesID, '.csv')
+  dir = '~/Dropbox/1current/sRealm/local_data/neutral-ts-v2-75/'
+  
+  temp %>% 
+    unnest(cols = data) %>% 
+    write_csv(., file = paste0(dir,file_name))
+  
+}
+
 for(i in 1:nrow(neutral_ss50)){
   temp = neutral_ss50 %>% 
     slice(i) 
   
+  print(paste(i, ' of ', nrow(neutral_ss50)))
+  
   file_name = paste0('parameter_id-', temp$parameter_id, '-', temp$timeSeriesID, '.csv')
   dir = '~/Dropbox/1current/sRealm/local_data/neutral-ts-v2-50/'
+  
+  temp %>% 
+    unnest(cols = data) %>% 
+    write_csv(., file = paste0(dir,file_name))
+  
+}
+
+for(i in 1:nrow(neutral_ss25)){
+  temp = neutral_ss25 %>% 
+    slice(i) 
+  
+  print(paste(i, ' of ', nrow(neutral_ss25)))
+  
+  file_name = paste0('parameter_id-', temp$parameter_id, '-', temp$timeSeriesID, '.csv')
+  dir = '~/Dropbox/1current/sRealm/local_data/neutral-ts-v2-25/'
+  
+  temp %>% 
+    unnest(cols = data) %>% 
+    write_csv(., file = paste0(dir,file_name))
+  
+}
+
+for(i in 1:nrow(neutral_ss10)){
+  temp = neutral_ss10 %>% 
+    slice(i) 
+  
+  print(paste(i, ' of ', nrow(neutral_ss10)))
+  
+  file_name = paste0('parameter_id-', temp$parameter_id, '-', temp$timeSeriesID, '.csv')
+  dir = '~/Dropbox/1current/sRealm/local_data/neutral-ts-v2-10/'
   
   temp %>% 
     unnest(cols = data) %>% 

@@ -9,9 +9,12 @@ library(tidyverse)
 # directed movement (non-random)
 # dat <- read_csv('~/Dropbox/simRealm/data/simulations/CXYAB2252T_steps_sim.csv')
 dat <- read_csv('/data/idiv_chase/simRealm/2022-05-04_steps_sim.csv')
+dat <- read_csv('/data/idiv_chase/simRealm/2022-05-13-2_steps_sim.csv')
 
 # meta1 <- read_csv('~/Dropbox/1current/sRealm/simRealm/simRealm/data/simulations/mobsim/CXYAB2252T_steps_metadata.csv')
+meta1 <- read_csv('~/Dropbox/1current/sRealm/simRealm/2022-05-04_steps_metadata.csv')
 meta1 <- read_csv('/data/idiv_chase/simRealm/2022-05-04_steps_metadata.csv')
+meta1 <- read_csv('/data/idiv_chase/simRealm/2022-05-13-2_steps_metadata.csv')
 
 # duration d (tibble)
 # load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/duration.Rdata')
@@ -73,7 +76,7 @@ save(site55,
      file = '~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/mobsim_v2_timeSeries_site55_pid-1-24.Rdata')
 
 save(site55,
-     file = '/data/idiv_chase/simRealm/mobsim_v2_timeSeries_site55.Rdata')
+     file = '/data/idiv_chase/simRealm/2022-05-13-mobsim_v2_timeSeries_site55.Rdata')
 
 # save all the time series (and the subsamples of site55 only)
 save(dat_ts, 
