@@ -23,7 +23,6 @@ pid = neutral_meta %>%
   filter(THETA==40 & M==0.2) %>% 
   pull(parameter_id)
 
-
 pdf('/data/idiv_chase/simRealm/results/neutral/figures/neutral-allYrs-local-assemblage-size.pdf',
     width = 9, height = 9)
 
