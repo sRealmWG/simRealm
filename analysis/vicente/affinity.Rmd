@@ -1,0 +1,676 @@
+---
+title: "T_c approach: <br> Affinity estimations"
+author: "Vicente J. Ontiveros"
+date: "5/19/2022"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = F, message = F)
+```
+
+```{r, warning = F}
+
+library(tidyverse)
+
+# Loading subsampling 10
+load("analysis/vicente/ss10.RData")
+
+ss10.est <- data.table::rbindlist(parall)
+ss10.est <- ss10.est %>% add_column(Subsampling = 10)
+
+# Loading subsampling 25
+load("analysis/vicente/ss25.RData")
+
+ss25.est <- data.table::rbindlist(parall)
+ss25.est <- ss25.est %>% add_column(Subsampling = 25)
+
+# Loading subsampling 50
+load("analysis/vicente/ss50.RData")
+
+ss50.est <- data.table::rbindlist(parall)
+ss50.est <- ss50.est %>% add_column(Subsampling = 50)
+
+# Loading subsampling 75
+load("analysis/vicente/ss75.RData")
+
+ss75.est <- data.table::rbindlist(parall)
+ss75.est <- ss75.est %>% add_column(Subsampling = 75)
+
+# Loading complete sampling
+load("analysis/vicente/estimates_neutral_v2.RData")
+
+neutral <- neutral %>% add_column(Subsampling = 100)
+
+# Load metadata
+n_metadata <- read.csv("data/simulations/neutral_metadata_v2.csv")
+
+# Gathering all estimates -------------------------------------------------
+neutral.est <- rbind(neutral, ss75.est, ss50.est, ss25.est, ss10.est)
+
+short.metadata <- n_metadata %>% select(2, 6, 7, 8)
+
+neutral.res <- inner_join(neutral.est, short.metadata)
+
+save(neutral.res, file = "analysis/vicente/Affinity_subsamplings.RData")
+```
+
+# Affinity
+
+## What is affinity?
+
+A measure of instantaneous change in community composition. Depends on:
+
+- The asymptote, $V_{Max}$ in Michaelis-Menten dynamics, assymptotic dissimilarity in ETIB.
+- Half-saturation, $K_M$ in M-M, a measure related to T_c in ETIB. 
+
+## Same affinity...
+
+```{r}
+library(tidyverse)
+
+col <- 0.1
+ext <- 0.2
+
+assymptotic <- 1 - col/(col + 2 * ext)
+half <- log((2 * col + 3 * ext)/(col + 2 * ext))/(col + ext)
+
+x <- 0:100/5
+
+y <- assymptotic * x / (half + x)
+
+y2 <- 1 - (col + ext * exp(-x * (col + ext)))/(col + 2 * ext - ext * exp(-x * (col + ext)))
+
+df1 <- data.frame(Time = x, Dissimilarity = y, Type = "Michaelis-Menten")
+df2 <- data.frame(Time = x, Dissimilarity = y2, Type = "ETIB")
+
+df <- rbind(df1, df2)
+
+ggplot(df, aes(x = Time, y = Dissimilarity, color = Type)) + 
+  geom_line(size = 1) + 
+  scale_color_manual(values = c("#EF3054", "#0b6e4f")) +
+  theme_bw() +
+  geom_hline(yintercept = assymptotic, linetype = 2) + 
+  annotate(geom = "text", x = 4.56, y = .4, label = "Half - saturation time") +
+  annotate(geom = "text", x = 2, y = .77, label = "Assymptotic Jaccard") + 
+  theme(aspect.ratio = .618, panel.grid.minor = element_blank(), legend.position = "bottom")
+
+```
+
+... but different temporal dynamics!
+
+## Sampling completeness
+
+```{r}
+ggplot(neutral.est, 
+       aes(x = Subsampling, y = raw_Affinity, group = (Subsampling), color = as.factor(Subsampling))) +
+   geom_boxplot() +
+   theme_bw() +
+   theme(legend.position = "none", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity") +
+   labs(color = "Subsampling")
+```
+
+Very slow change in the true community!
+
+## Duration
+
+```{r}
+ggplot((neutral.est), aes(x = Duration, y = raw_Affinity, color = as.factor(Subsampling))) +
+   geom_point(alpha = .7) +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity") +
+   labs(color = "Subsampling")
+```
+
+Slight but significant tendency to decrease with duration. Asymptotically unbiased.
+
+## Duration - 100%
+
+```{r}
+ggplot(neutral.res %>% filter(Subsampling == 100) %>% filter(THETA == 40) %>% 
+          filter(M == .2) %>% filter(N == 1000), aes(x = Duration, y = raw_Affinity)) +
+   geom_point(alpha = .9, color = "#E76BF3") +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity") +
+   labs(color = "Subsampling")
+```
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(Subsampling == 100) %>% filter(THETA == 40) %>% 
+          filter(M == .2) %>% filter(N == 1000),
+           raw_Affinity ~ Duration))
+```
+
+Almost significant tendency to decrease with duration. Asymptotically unbiased. $\Theta$ = 40, M = .2, N = 1000.
+
+## Species pool size
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id < 10), aes(x = THETA, y = raw_Affinity, color = as.factor(Subsampling))) +
+   geom_jitter(alpha = .9) +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity") +
+   labs(color = "Subsampling")
+```
+
+## Species pool size - 100% - duration 13
+
+```{r}
+ggplot(neutral.res %>% 
+          filter(parameter_id < 10) %>% 
+          filter(Subsampling == 100) %>% 
+          filter(Duration == 13), 
+       aes(x = THETA, y = raw_Affinity, group = THETA)) +
+    geom_boxplot(outlier.shape = NA, color = "#E76BF3", fill = NA) +
+   geom_jitter(alpha = .25) +
+  theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity")
+```
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(parameter_id < 10) %>% filter(Subsampling == 100) %>% 
+          filter(Duration == 13),
+           raw_Affinity ~ THETA))
+```
+
+Very small but significant increase. N = 1000, M = .2.
+
+## Local community size
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 20), aes(x = N, y = raw_Affinity, color = as.factor(Subsampling))) +
+   geom_jitter(alpha = .9) +
+   scale_x_log10() +
+   annotation_logticks(sides = "b") +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity") +
+   labs(color = "Subsampling")
+```
+
+## Local comm. size - 100% - duration 13
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 20) %>% filter(Subsampling == 100) %>% 
+          filter(Duration == 13), 
+       aes(x = N, y = raw_Affinity, group = N)) +
+       geom_boxplot(outlier.shape = NA, color = "#E76BF3") +
+  geom_jitter(alpha = .25) +
+   scale_x_log10() +
+   annotation_logticks(sides = "b") +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity") +
+   labs(color = "Subsampling")
+```
+
+$\Theta$ = 40, M = .2.
+
+## Rate of new species arrival
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 9) %>% filter(parameter_id < 21), 
+       aes(x = M, y = raw_Affinity, color = as.factor(Subsampling))) +
+   geom_jitter(alpha = .9) +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity") +
+   labs(color = "Subsampling")
+```
+
+## New species arrival - 100% - dur. 13
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 9) %>% 
+          filter(parameter_id < 21) %>% filter(Subsampling == 100) %>% 
+       filter(Duration == 13), 
+       aes(x = M, y = raw_Affinity, group = M)) +
+   geom_jitter(alpha = .25) +   
+   geom_boxplot(outlier.shape = NA, color = "#E76BF3", fill = NA) +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity") +
+   labs(color = "Subsampling")
+```
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(parameter_id > 9) %>% 
+              filter(parameter_id < 21) %>% filter(Subsampling == 100) %>% 
+              filter(Duration == 13),
+           raw_Affinity ~ M))
+```
+
+Very small but significant increase. $\Theta$ = 40, N = 1000.
+
+# $T_c$
+
+$T_c$ only measures the speed of change, not its extent.
+
+## Sampling completeness
+
+```{r}
+ggplot(neutral.est, 
+       aes(x = Subsampling, y = raw_T_c, group = (Subsampling), color = as.factor(Subsampling))) +
+   geom_boxplot() +
+   theme_bw() +
+   theme(legend.position = "none", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic time") +
+   labs(color = "Subsampling")
+```
+
+Very slow change in the true community!
+
+## Duration
+
+```{r}
+ggplot((neutral.est), aes(x = Duration, y = raw_T_c, color = as.factor(Subsampling))) +
+   geom_point(alpha = .7) +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic time") +
+   labs(color = "Subsampling")
+```
+
+
+
+## Duration - 100%
+
+```{r}
+ggplot(neutral.res %>% filter(Subsampling == 100) %>% filter(THETA == 40) %>% 
+          filter(M == .2) %>% filter(N == 1000), aes(x = Duration, y = raw_T_c)) +
+   geom_point(alpha = .9, color = "#E76BF3") +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic time") +
+   labs(color = "Subsampling")
+```
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(Subsampling == 100) %>% filter(THETA == 40) %>% 
+          filter(M == .2) %>% filter(N == 1000),
+           raw_T_c ~ Duration))
+```
+
+$\Theta$ = 40, M = .2, N = 1000.
+
+## Summary
+- Difficult to see things maybe because slow pace of change. 
+- Increasing species pool size while maintaining local community size and migration constant reduces $T_c$ (less individuals per species increases the pace of change).
+- Local community size seems to have no effect on $T_c$ (related to the abundance distribution?).
+- Increasing the rate of new species arrival reduces $T_c$ (more migration increases the pace of change).
+- See figures in More Slides: T_c.
+
+
+# Characteristic Jaccard
+
+## Sampling completeness
+
+```{r}
+ggplot(neutral.est, 
+       aes(x = Subsampling, y = raw_J_t_c, group = (Subsampling), color = as.factor(Subsampling))) +
+   geom_boxplot() +
+   theme_bw() +
+   theme(legend.position = "none", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic Jaccard") +
+   labs(color = "Subsampling")
+```
+
+Small change in the true community!
+
+## Duration
+
+```{r}
+ggplot((neutral.est), aes(x = Duration, y = raw_J_t_c, color = as.factor(Subsampling))) +
+   geom_point(alpha = .7) +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic Jaccard") +
+   labs(color = "Subsampling")
+```
+
+Biased estimator under neutral, zero-sum dynamics? 
+
+## Duration - 100%
+
+```{r}
+ggplot(neutral.res %>% filter(Subsampling == 100) %>% filter(THETA == 40) %>% 
+          filter(M == .2) %>% filter(N == 1000), aes(x = Duration, y = raw_J_t_c)) +
+   geom_point(alpha = .9, color = "#E76BF3") +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic Jaccard") +
+   labs(color = "Subsampling")
+```
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(Subsampling == 100) %>% filter(THETA == 40) %>% 
+          filter(M == .2) %>% filter(N == 1000),
+           raw_J_t_c ~ Duration))
+```
+
+$\Theta$ = 40, M = .2, N = 1000.
+
+## Summary
+- Unreliable estimator because of very limited change?
+- Estimates seem to fail.
+- Contradictory results for species pool size, migration.
+- Biases cancel each other using affinity?
+- See figures in More Slides: Characteric Jaccard.
+
+# More Slides: Characteristic Jaccard.
+
+## Species pool size
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id < 10), aes(x = THETA, y = raw_J_t_c, color = as.factor(Subsampling))) +
+   geom_jitter(alpha = .9) +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic Jaccard") +
+   labs(color = "Subsampling")
+```
+
+## Species pool size - 100% - duration 13
+
+```{r}
+ggplot(neutral.res %>% 
+          filter(parameter_id < 10) %>% 
+          filter(Subsampling == 100) %>% 
+          filter(Duration == 13), 
+       aes(x = THETA, y = raw_J_t_c, group = THETA)) +
+    geom_boxplot(outlier.shape = NA, color = "#E76BF3", fill = NA) +
+   geom_jitter(alpha = .25) +
+  theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic time") 
+```
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(parameter_id < 10) %>% filter(Subsampling == 100) %>% 
+          filter(Duration == 13),
+           raw_J_t_c ~ THETA))
+```
+
+Small but significant decrease! N = 1000, M = .2.
+
+## Local community size
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 20), aes(x = N, y = raw_J_t_c, color = as.factor(Subsampling))) +
+   geom_jitter(alpha = .9) +
+   scale_x_log10() +
+   annotation_logticks(sides = "b") +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic Jaccard") +
+   labs(color = "Subsampling")
+```
+
+## Local comm. size - 100% - duration 13
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 20) %>% filter(Subsampling == 100) %>% 
+          filter(Duration == 13), 
+       aes(x = N, y = raw_J_t_c, group = N)) +
+       geom_boxplot(outlier.shape = NA, color = "#E76BF3") +
+  geom_jitter(alpha = .25) +
+   scale_x_log10() +
+   annotation_logticks(sides = "b") +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic Jaccard") +
+   labs(color = "Subsampling")
+```
+
+
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(parameter_id > 20) %>% 
+              filter(Subsampling == 100) %>% 
+              filter(Duration == 13),
+           raw_J_t_c ~ N))
+```
+
+Almost significant decrease. $\Theta$ = 40, M = .2.
+
+## Rate of new species arrival
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 9) %>% filter(parameter_id < 21), 
+       aes(x = M, y = raw_J_t_c, color = as.factor(Subsampling))) +
+   geom_jitter(alpha = .9) +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic Jaccard") +
+   labs(color = "Subsampling")
+```
+
+## New species arrival - 100% - dur. 13
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 9) %>% 
+          filter(parameter_id < 21) %>% filter(Subsampling == 100) %>% 
+       filter(Duration == 13), 
+       aes(x = M, y = raw_J_t_c, group = M)) +
+   geom_jitter(alpha = .25) +   
+   geom_boxplot(outlier.shape = NA, color = "#E76BF3", fill = NA) +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic Jaccard") +
+   labs(color = "Subsampling")
+```
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(parameter_id > 9) %>% 
+              filter(parameter_id < 21) %>% filter(Subsampling == 100) %>% 
+              filter(Duration == 13),
+           raw_J_t_c ~ M))
+```
+
+Significant decrease. $\Theta$ = 40, N = 1000.
+
+
+# More Slides: T_c.
+
+## Species pool size
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id < 10), aes(x = THETA, y = raw_T_c, color = as.factor(Subsampling))) +
+   geom_jitter(alpha = .9) +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic time") +
+   labs(color = "Subsampling")
+```
+
+## Species pool size - 100% - duration 13
+
+```{r}
+ggplot(neutral.res %>% 
+          filter(parameter_id < 10) %>% 
+          filter(Subsampling == 100) %>% 
+          filter(Duration == 13), 
+       aes(x = THETA, y = raw_T_c, group = THETA)) +
+    geom_boxplot(outlier.shape = NA, color = "#E76BF3", fill = NA) +
+   geom_jitter(alpha = .25) +
+  theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic time") 
+```
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(parameter_id < 10) %>% filter(Subsampling == 100) %>% 
+          filter(Duration == 13),
+           raw_T_c ~ THETA))
+```
+
+Small but significant decrease. N = 1000, M = .2.
+
+## Local community size
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 20), aes(x = N, y = raw_T_c, color = as.factor(Subsampling))) +
+   geom_jitter(alpha = .9) +
+   scale_x_log10() +
+   annotation_logticks(sides = "b") +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic time") +
+   labs(color = "Subsampling")
+```
+
+## Local comm. size - 100% - duration 13
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 20) %>% filter(Subsampling == 100) %>% 
+          filter(Duration == 13), 
+       aes(x = N, y = raw_T_c, group = N)) +
+       geom_boxplot(outlier.shape = NA, color = "#E76BF3") +
+  geom_jitter(alpha = .25) +
+   scale_x_log10() +
+   annotation_logticks(sides = "b") +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic time") +
+   labs(color = "Subsampling")
+```
+
+
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(parameter_id > 20) %>% 
+              filter(Subsampling == 100) %>% 
+              filter(Duration == 13),
+           raw_T_c ~ N))
+```
+
+No linear relationship. $\Theta$ = 40, M = .2.
+
+## Rate of new species arrival
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 9) %>% filter(parameter_id < 21), 
+       aes(x = M, y = raw_T_c, color = as.factor(Subsampling))) +
+   geom_jitter(alpha = .9) +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic time") +
+   labs(color = "Subsampling")
+```
+
+## New species arrival - 100% - dur. 13
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 9) %>% 
+          filter(parameter_id < 21) %>% filter(Subsampling == 100) %>% 
+       filter(Duration == 13), 
+       aes(x = M, y = raw_T_c, group = M)) +
+   geom_jitter(alpha = .25) +   
+   geom_boxplot(outlier.shape = NA, color = "#E76BF3", fill = NA) +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Characteristic time") +
+   labs(color = "Subsampling")
+```
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(parameter_id > 9) %>% 
+              filter(parameter_id < 21) %>% filter(Subsampling == 100) %>% 
+              filter(Duration == 13),
+           raw_T_c ~ M))
+```
+
+Significant decrease. $\Theta$ = 40, N = 1000.
+
+
+
+
+# Old slides
+## Species pool size - complete
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id < 10) %>% filter(Subsampling == 100), 
+       aes(x = THETA, y = raw_Affinity, group = THETA)) +
+    geom_boxplot(outlier.shape = NA, color = "#E76BF3", fill = NA) +
+   geom_jitter(alpha = .1) +
+  theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity")
+```
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(parameter_id < 10) %>% filter(Subsampling == 100),
+           raw_Affinity ~ THETA))
+```
+
+Very small but significant increase.
+
+## Local community size - complete
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 20) %>% filter(Subsampling == 100), 
+       aes(x = N, y = raw_Affinity, group = N)) +
+       geom_boxplot(outlier.shape = NA, color = "#E76BF3") +
+  geom_jitter(alpha = .1) +
+   scale_x_log10() +
+   annotation_logticks(sides = "b") +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity") +
+   labs(color = "Subsampling")
+```
+
+
+
+## Rate of new species arrival - complete
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 9) %>% filter(parameter_id < 21) %>% filter(Subsampling == 100), 
+       aes(x = M, y = raw_Affinity, group = M)) +
+   geom_jitter(alpha = .1) +   
+   geom_boxplot(outlier.shape = NA, color = "#E76BF3", fill = NA) +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity") +
+   labs(color = "Subsampling")
+```
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(parameter_id > 9) %>% filter(parameter_id < 21) %>% filter(Subsampling == 100),
+           raw_Affinity ~ M))
+```
+
+Very small but significant increase.
+
+
+# End
+
+<!-- ## R Markdown -->
+
+<!-- This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>. -->
+
+<!-- When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. -->
+
+<!-- ## Slide with Bullets -->
+
+<!-- - Bullet 1 -->
+<!-- - Bullet 2 -->
+<!-- - Bullet 3 -->
+
+<!-- ## Slide with R Output -->
+
+<!-- ```{r cars, echo = TRUE} -->
+<!-- summary(cars) -->
+<!-- ``` -->
+
+<!-- ## Slide with Plot -->
+
+<!-- ```{r pressure} -->
+<!-- plot(pressure) -->
+<!-- ``` -->
+
