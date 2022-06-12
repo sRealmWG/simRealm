@@ -1,0 +1,149 @@
+SourceID,DataOwner,PointContact,Citations,URLaccess
+1,Agència Catalana de l'Aigua,–,"Agència Catalana de l’Aigua (2003), Agència Catalana de l’Aigua (2010), Agència Catalana de l’Aigua (2018)",http://aca.gencat.cat/
+2,"Jaquelini O. Zeni, Lilian Casatti",jackezeni@yahoo.com.br,"Zeni et al. (2017), Casatti et al. (2009)",–
+3,Luz Jimenez-Segura,luz.jimenez@udea.edu.co,Universidad de Antioquia-Empresas Publicas de Medellin (2019),–
+4,Tibor Eros,eros.tibor@okologia.mta.hu,Eros et al. (2014),–
+5,Jammes Gammon,–,Gammon (2013),–
+6,Department of Environment and Science,water.data@qld.gov.au,Ecosystem Health Monitoring Program Queensland (2019),https://hlw.org.au/report-card/
+7,"Teppo Vehanen, Tapio Sutela",Teppo.Vehanen@luke.fi,Finnish electrofishing register Hertta (2019),https://wwwp2.ymparisto.fi/koekalastus_sahko/yhteinen/Login.aspx?ReturnUrl=%2fkoekalastus_sahko
+8,Parks Canada,–,Sigouin (2017),https://open.canada.ca/data/en/dataset/fe2441a6-8ae4-4884-b181-cd7ec53bd842
+9,Keith Gido,kgido@ksu.edu,Whitney et al. (2016),–
+10,David L. Propst,dpropst@unm.edu,"Gido et al. (2013), Gido et al. (2019)",–
+11,Marsh and Associates,–,Kesner and Marsh (2010),https://www.rosemonteis.us/documents/kesner-marsh-2010
+12,U.S. Environmental Protection Agency,–,"Griffith (2017), Griffith et al. (2018)",https://doi.org/10.23719/1376690
+13,"Thiago V. T. Occhi, Jean R. S. Vitule",thiago.v.t.occhi@gmail.com,"Occhi, V.T. & Vitule, J.R.S. (Unpublished data)",–
+14,"Akira Terui, Hirokazu Urabe",a_terui@uncg.edu,Terui et al. (2018),–
+15,Iowa Department of Natural Resources,–,Iowa DNR (2013),https://data.iowa.gov/Environment/BioNet/e7yf-f5fs
+16,"Marco Milardi, Giuseppe Castaldelli, Anna Gavioli",marco.milardi@unife.it,Milardi et al. (2020),–
+17,World Health Organisation,pablo.tedesco@ird.fr,Levêque et al. (2003),–
+18,Mark Pyron,mpyron@bsu.edu,Pyron et al. (1998),–
+19,Keith Gido,–,Gido (2017),https://doi.org/10.6073/pasta/150e218b069074a8ecede85a7406d43f
+20,"Bill McLarney, Jason Meador",jmeador@mainspringconserves.org,McLarney et al. (2013),http://coweeta.uga.edu/dbpublic/personnel_bios.asp?id=wmclarney
+21,Upper Midwest Environmental Sciences Center,–,Long Term Resource Monitoring Program (2016),https://www.umesc.usgs.gov/data_library/fisheries/fish1_query.shtml
+22,"William Matthews, Edie Marsh-Matthews",–,Matthews and Marsh-Matthews (2017),https://doi.org/10.5061/dryad.2435k
+23,Murray-Darling Basin Authority,–,Murray-Darling Basin Authority (2018),https://data.gov.au/data/dataset/murray-darling-basin-fish-and-macroinvertebrate-survey
+24,Minnesota Pollution Control Agency,–,Minnesota Pollution Control Agency (2018),https://cf.pca.state.mn.us/water/watershedweb/wdip/search_more.cfm?datatype=assessments
+25,"Montana Fish, Wildlife & Parks",–,"Montana, Fish, Wildlife & Parks (2019)",http://gis-mtfwp.opendata.arcgis.com/items/8192e75218c6460ba97ba3dd0a2fb3a5
+26,U.S. Geological Survey,–,U.S. Geological Survey (2019),https://aquatic.biodata.usgs.gov/clearCriteria.action
+27,U.K. Environmental Agency,–,U.K. Environmental Agency (2019),https://data.gov.uk/dataset/d129b21c-9e59-4913-91d2-82faef1862dd/nfpd-freshwater-fish-survey-relational-datasets
+28,North Carolina Department of Environmental Quality,–,North Carolina Department of Environmental Quality (2018),https://deq.nc.gov/about/divisions/water-resources/water-resources-data/water-sciences-home-page/ecosystems-branch/fish-stream-assessment-program
+29,"Rafael P. Leitão, Paulo S. Pompeu, Gilberto N. Salvador",ecorafa@gmail.com,Fagundes et al. (2015),–
+30,Christopher Taylor,christopher.taylor@utrgv.edu,"Winston et al. (1991), Taylor (2010)",–
+31,Okavango Research Institute,–,Mosie and Makati (2018),https://www.gbif.org/dataset/77929c0a-7506-4b2d-a49d-10fc3312d50d
+32,Office Francais de la Biodiversite,–,Office Francais de la Biodiversite (2019),http://www.naiades.eaufrance.fr/acces-donnees#/hydrobiologie
+33,Oklahoma Water Resources Board,–,Oklahoma Water Resources Board (2019),http://home-owrb.opendata.arcgis.com/search?tags=fish
+34,Agencia Vasca del Agua,–,Agencia Vasca del Agua (2019),http://www.uragentzia.euskadi.eus/informazioa/ubegi/u81-0003341/eu/
+35,Angelo A. Agostinho,agostinhoaa@nupelia.uem.br,Ortega et al. (2015),–
+36,Stephen R. Davenport,stephen_davenport@fws.gov,"Davenport, S.R. (Unpublished data)",–
+37,"Renato B. Dala-Corte, Fernando G. Becker",renatocorte@gmail.com,Dala-Corte et al. (2017),–
+38,Vincent Resh,–,"Bêche et al. (2009), The Resh Lab (2019)",https://nature.berkeley.edu/reshlab/
+39,Toronto and Region Conservation Authority,–,Toronto and Region Conservation Authority (2018),https://data.trca.ca/dataset/2018-watershed-fish-community
+40,United States Fish and Wildlife Service,nathan_franssen@fws.gov,U.S. Fish and Wildlife Service (2017),–
+41,Jerome A. Stefferud,stefferud@cox.net,"Stefferud, J.A. (Unpublished data)",–
+42,Swedish University of Agricultural Sciences,–,Sers (2013),https://www.slu.se/en/departments/aquatic-resources1/databases1/database-for-testfishing-in-streams/
+43,Emili García-Berthou,emili.garcia@udg.edu,"Benejam et al. (2010), Merciai et al. (2017)",–
+44,Seiji Miyazono,–,Miyazono and Taylor (2015),https://bioone.org/journals/The-Southwestern-Naturalist/volume-60/issue-1/MP-02.1/Long-term-changes-in-seasonal-fish-assemblage-dynamics-in-an/10.1894/MP-02.1.short
+45,John Rinne,jrinne@ureach.com,Rinne & Miller (2006),–
+46,Gerlinde Van Thuyne,–,"Van Thuyne et al. (2013), Brosens et al. (2015)",https://ipt.inbo.be/resource?r=vis-inland-occurrences
+,,,,
+References,,,,
+[1] Agència Catalana de l’Aigua (2003) Desenvolupament d'un índex d'integritat biòtica (IBICAT) basat en l'ús dels peixos com a indicadors de la qualitat ambiental dels rius a Catalunya. Aplicació de la Directiva Marc en Política d’Aigües de la Unió Europea (2000/60/CE). 207 pages.,,,,
+"[1] Agència Catalana de l’Aigua (2010) Ajust de l’Índex d’Integritat Biòtica (IBICAT) basat en l’ús dels peixos com a indicadors de la qualitat ambiental als rius de Catalunya. Departament de Medi Ambient i Habitatge, Generalitat de Catalunya. 187 pages.",,,,
+"[1] Agència Catalana de l’Aigua (2018) ACORD GOV/139/2013, de 15 d’octubre, pel qual s’aprova el Programa de seguiment i control del Districte de conca fluvial de Catalunya per al període 2013-2018.",,,,
+,,,,
+"[2] Casatti, L., Ferreira, C.P. & Carvalho, F.R. (2009) Grass-dominated stream sites exhibit low fish species diversity and dominance by guppies: an assessment of two tropical pasture river basins. Hydrobiologia, 632, 273–283.",,,,
+"[2] Zeni, J.O., Hoeinghaus, D.J. & Casatti, L. (2017) Effects of pasture conversion to sugarcane for biofuel production on stream fish assemblages in tropical agroecosystems. Freshwater Biology, 62, 2026–2038.",,,,
+,,,,
+"[3] Universidad de Antioquia-Empresas Publicas de Medellin. (2019) Monitoreo a la ictiofauna, su habitat y sus servicios ecosistemicos. Convenio CT 2017- 001714.",,,,
+,,,,
+"[4] Eros, T., Sály, P., Takács, P., Higgins, C.L., Bíró, P. & Schmera, D. (2014) Quantifying temporal variability in the metacommunity structure of stream fishes: the influence of non-native species and environmental drivers. Hydrobiologia, 722, 31–43.",,,,
+,,,,
+"[5] Gammon, J. (2003) The fish communities of Big Raccoon Creek 1981-2002. Report for Heritage Environmental Services. Indianapolis, Indiana. 258 pages.",,,,
+,,,,
+"[6] Bunn, S.E., Abal, E.G., Smith, M.J., Choy, S.C., Fellows, C.S., Harch, B.D., Kennard, M.J. & Sheldon, F. (2010) Integration of science and monitoring of river ecosystem health to guide investments in catchment protection and rehabilitation. Freshwater Biology, 55, 223–240.",,,,
+,,,,
+[7] Finnish electrofishing register Hertta (2019) Available at https://wwwp2.ymparisto.fi/koekalastus_sahko/yhteinen/Login.aspx?ReturnUrl=%2fkoekalastus_sahko [Accessed on 04/09/2019].,,,,
+,,,,
+"[8] Sigouin, D. (2017) Fish Communities – Forillon, dataset fe2441a6-8ae4-4884-b181-cd7ec53bd842. Available at https://open.canada.ca/data/en/dataset/fe2441a6-8ae4-4884-b181-cd7ec53bd842 [Accessed on 05/07/2019].",,,,
+,,,,
+"[9] Whitney, J.E., Gido, K.E., Martin, E.C. & Hase K.J. (2016) The first to arrive and the last to leave: colonisation and extinction dynamics of common and rare fishes in intermittent prairie streams. Freshwater Biology, 61, 1321–1334.",,,,
+,,,,
+"[10] Gido, K.B, Propst, D.L., Olden, J.D., & Bestgen, K.R. (2013) Multidecadal responses of native and introduced fishes to natural and altered flow regimes in the American Southwest. Canadian Journal Fisheries and Aquatic Sciences, 70, 554–564",,,,
+"[10] Gido, K.B, Propst, D.L., Whitney, J.E., Hedden, S.C., Turner, T.F. & Pilger, T.J. (2019) Pockets of resistance: Response of arid-land fish communities to climate, hydrology, and wildfire. Freshwater Biology, 64, 761–777.",,,,
+,,,,
+"[11] Kesner, B.R. & Marsh, P.C. (2010) Central Arizona project fish monitoring: Final report. Analysis of fish population monitoring data for selected waters of the Gila River Basin, Arizona, for the five year period 2005-2009. Contract No. R09PD32013. Submitted to U.S. Bureau of Reclamation. Tempe, Arizona: Marsh and Associates, LLC. 50 pages.",,,,
+,,,,
+"[12] Griffith, M. (2017) Combined Fish Data. U.S. EPA Office of Research and Development (ORD), doi: 10.23719/1376690.",,,,
+"[12] Griffith, M., Zheng, L. & Cormier, S. (2018) Using extirpation to evaluate ionic tolerance of freshwater fish. Environmental Toxicology and Chemistry, 37, 871–883.",,,,
+,,,,
+"[13] Occhi, T.V.T and Vitule, J.R.S (Unpublished data).",,,,
+,,,,
+"[14] Terui, A., Ishiyama, N., Urabe, H., Ono, S., Finlay, J. C. & Nakamura, F. (2018) Metapopulation stability in branching river networks. Proceedings of the National Academy of Sciences, 115, E5963–E5969.",,,,
+,,,,
+[15] Iowa DNR [Department of Natural Resources] (2013) BioNet - Iowa DNR Biological Monitoring and Assessment Database. Available at https://programs.iowadnr.gov/bionet/ [Accessed on 02/01/2018].,,,,
+,,,,
+"[16] Milardi, M., Gavioli, A., Soana, E., Lanzoni, M., Fano, E.A. & Castaldelli, G. (2020) The role of species introduction in modifying the functional diversity of native communities. Science of the Total Environment, 699, 134364.",,,,
+,,,,
+"[17] Levêque, C., Hougard, J.M., Resh, V., Statzner, B. & Yaméogo, L. (2003) Freshwater ecology and biodiversity in the tropics: what did we learn from 30 years of onchocerciasis control and the associated biomonitoring of West African rivers? Hydrobiologia, 500, 23–49.",,,,
+,,,,
+"[18] Pyron, M., Vaughn, C.C., Winston, M.R. & Pigg J. (1998) Fish assemblage structure from 20 years of collections in the Kiamichi River, Oklahoma. Southwestern Naturalist, 43, 336–343.",,,,
+,,,,
+"[19] Gido K. (2017). Gido, K. (2017) CFC01 Kings Creek long-term fish and crayfish community sampling at Konza Prairie. Environmental Data Initiative. Available at https://doi.org/10.6073/pasta/150e218b069074a8ecede85a7406d43f [Accessed on 11/18/2019].",,,,
+,,,,
+"[20] McLarney, W.O., Meador, J. & Chamblee, J. (2013) Upper Little Tennessee River biomonitoring program database. Coweeta Long Term Ecological Research Program. Available at: https://coweeta.uga.edu/dbpublic/dataset_details.asp?accession54045 [Accessed on 11/15/2019].",,,,
+,,,,
+[21] Long Term Resource Monitoring Program (2016) Available at https://www.umesc.usgs.gov/data_library/fisheries/fish1_query.shtml [Accessed on 06/09/2019].,,,,
+,,,,
+"[22] Matthews, W.J. & Marsh-Matthews, E. (2017) Data from: Stream fish community dynamics: a critical synthesis, Dryad, Dataset, doi: 10.5061/dryad.2435k.",,,,
+,,,,
+[23] Murray-Darling Basin Authority (2018) Murray-Darling Basin Fish and Macroinvertebrate Survey. Available at https://data.gov.au/data/dataset/7826d7c9-bcc5-48c0-832a-66aaedfe7b0f [Accessed on 10/15/2019].,,,,
+,,,,
+[24] Minnesota Pollution Control Agency (2018) Surface water data. Available at https://cf.pca.state.mn.us/water/watershedweb/wdip/search_more.cfm?datatype=assessments [Accessed on 04/03/2019].,,,,
+,,,,
+"[25] Montana, Fish, Wildlife & Parks (2019) Fish Survey Sites. Available at http://gis-mtfwp.opendata.arcgis.com/datasets/8192e75218c6460ba97ba3dd0a2fb3a5 [Accessed on 05/21/2019].",,,,
+,,,,
+"[26] U.S. Geological Survey (2019) BioData - Aquatic Bioassessment Data for the Nation. Available at https://aquatic.biodata.usgs.gov/clearCriteria.action [Accessed on 10/15/2019], doi:10.5066/F77W698B.",,,,
+,,,,
+[27] U.K. Environmental Agency (2019) National Fish Populations Database (NFPD): Freshwater fish survey relational datasets. Available at https://data.gov.uk/dataset/d129b21c-9e59-4913-91d2-82faef1862dd/nfpd-freshwater-fish-survey-relational-datasets [Accessed on 10/15/2019].,,,,
+,,,,
+[28] North Carolina Department of Environmental Quality (2018) Fish Community Assessment Data. Available at https://deq.nc.gov/about/divisions/water-resources/water-resources-data/water-sciences-home-page/biological-assessment-branch/fish-community [Accessed on 02/06/2018].,,,,
+,,,,
+"[29] Fagundes, D.C., Leal, C.G., Carvalho, D.R., Junqueira, N.T., Langeani, F. & Pompeu, P.S. (2015) The stream fish fauna from three regions of the Upper Paraná River basin. Biota Neotropica, 15, 1–8.",,,,
+,,,,
+"[30] Winston, M.R., Taylor, C.M. & Pigg, J. (1991) Upstream extirpation of four minnow species due to damming of a prairie stream. Transactions of the American Fisheries Society, 120, 98–105.",,,,
+"[30] Taylor, C.M.  (2010) Covariation among plains stream fish assemblages, flow regimes, and patterns of water use. In: Community ecology of stream fishes: concepts, approaches, and techniques.  American Fisheries Society Symposium, 2010.",,,,
+,,,,
+"[31] Mosie, I. & Makati, K. (2018) Long term time-series data on fish monitoring by Okavango Research Institute, Botswana. Version 1.2. Okavango Research Institute. Available at https://www.gbif.org/dataset/77929c0a-7506-4b2d-a49d-10fc3312d50d [Accessed on 05/11/2019], doi: 10.15468/4vvwzc.",,,,
+,,,,
+[32] Office français de la biodiversité (2019) Suivi des éléments biologiques ‘POISSONS’ des rivières françaises. Available at http://www.naiades.eaufrance.fr/acces-donnees#/hydrobiologie [Accessed on 07/08/2019].,,,,
+,,,,
+[33] Oklahoma Water Resources Board (2019) OWRB Open Data. Available at http://home-owrb.opendata.arcgis.com/search?tags=fish [Accessed on 10/16/2019].,,,,
+,,,,
+[34] Agencia Vasca del Agua (2019) UBEGI. Información sobre el estado de las masas de agua de la CAPV. Available at http://www.uragentzia.euskadi.eus/informacion/ubegi/u81-0003341/es/ [Accessed 10/10/2019].,,,,
+,,,,
+"[35] Ortega, J.C.G., Dias, R.M., Petry, A.C., Oliveira, E.F. & Agostinho, A.A. (2015) Spatio-temporal organization patterns in the fish assemblages of a Neotropical floodplain. Hydrobiologia, 745, 31–41.",,,,
+,,,,
+"[36] Davenport, S. R. (Unpublished data).",,,,
+,,,,
+"[37] Dala-Corte, R.B, Becker, F.G. & Melo, A.S. (2017) The importance of metacommunity processes for long-term turnover of riffle-dwelling fish assemblages depends on spatial position within a dendritic network. Canadian Journal of Fisheries and Aquatic Sciences, 74, 101–115.",,,,
+,,,,
+"[38] Bêche, L.A., Connors, P.G., Resh, V.H. & Merenlender, A.M. (2009) Resilience of fishes and invertebrates to prolonged drought in two California streams. Ecography, 32, 778–788.",,,,
+[38] The Resh Lab (2019) Hunting Creek and Knoxville Creek long-term data. Available at: https://nature.berkeley.edu/reshlab/data/HCKC_fish.xls [Accessed 05/19/2019].,,,,
+,,,,
+[39] Toronto and Region Conservation Authority (TRCA) (2018) Watershed Fish Community. Available at https://data.trca.ca/dataset/2018-watershed-fish-community [Accessed on 09/18/2019].,,,,
+,,,,
+"[40] U.S. Fish and Wildlife Service (2017) San Juan River basin recovery implementation program. Albuquerque, NM, 87113, USA. Data are available by contacting: https://www.fws.gov/southwest/sjrip/.",,,,
+,,,,
+"[41] Stefferud, J.A. (Unpublished data).",,,,
+,,,,
+"[42] Sers, B. (2013) Swedish Electrofishing RegiSter – SERS. Swedish University of Agricultural Sciences (SLU), Department of Aquatic Resources. Available at http://www.slu.se/elfiskeregistret [Accessed on 11/18/2019].",,,,
+,,,,
+"[43] Benejam, L., Angermeier, P.L., Munné, A. & García-Berthou, E. (2010) Assessing effects of water abstraction on fish assemblages in Mediterranean streams. Freshwater Biology 55, 628–642.",,,,
+"[43] Merciai, R., Molons-Sierra, C., Sabater, S. & García-Berthou, E. (2017) Water abstraction affects abundance, size-structure and growth of two threatened cyprinid fishes. Plos One, 12, e0175932.",,,,
+,,,,
+"[44] Miyazono, S. & Taylor, C.M. (2015) Long-term changes in seasonal fish assemblage dynamics in an adventitious desert stream. The Southwestern Naturalist, 60, 72–79.",,,,
+,,,,
+"[45] Rinne, J.N., & Miller, D. (2006) Hydrology, geomorphology and management: implications for sustainability of native southwestern fishes. Reviews in Fisheries Sciences 14, 91–110.",,,,
+,,,,
+"[46] Van Thuyne, G., Breine, J., Verreycken, H., De Boeck, T., Brosens, D. & Desmet, P. (2013) VIS - Fishes in inland waters in Flanders, Belgium. Research Institute for Nature and Forest (INBO). Dataset/Occurrence. Available at https://www.gbif.org/dataset/823dc56e-f987-495c-98bf-43318719e30f [Accessed on 04/11/2017], doi:10.15468/gzyxyd.",,,,
+"[46] Brosens, D., Breine, J., Van Thuyne, G., Belpaire, C., Desmet, P. & Verreycken, H. (2015) VIS – A database on the distribution of fishes in inland and estuarine waters in Flanders, Belgium. ZooKeys, 475, 119-145.",,,,

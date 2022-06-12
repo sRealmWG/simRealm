@@ -2,15 +2,16 @@
 
 library(tidyverse)
 
+# v1: random walk movement
 dat <- read_csv('~/Dropbox/1current/sRealm/local_data/IFYAH3130E_jitter_sim.csv')
 meta1 <- read_csv('~/Dropbox/1current/sRealm/local_data/IFYAH3130E_jitter_metadata.csv')
 
-load('~/Dropbox/1current/sRealm/simRealm/data/time_series/timeSeries_site55_pid-1-24.Rdata')
-rm(site55)
-# want to subsample time series with duration between 3-100 years
-# duration = tibble(d = floor(rlnorm(n = 250, meanlog = 2.3, sdlog = 1))) %>% 
-#   filter(d > 2 & d < 101)
-# 
+# directed movement (non-random)
+dat <- read_csv('~/Dropbox/simRealm/data/simulations/CXYAB2252T_steps_sim.csv')
+meta1 <- read_csv('~/Dropbox/1current/sRealm/simRealm/simRealm/data/simulations/mobsim/CXYAB2252T_steps_metadata.csv')
+
+# duration d (tibble)
+load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/duration.Rdata')
 # hist(duration$d)
 
 
@@ -62,9 +63,8 @@ site55 = dat_ts %>%
   rename(ss100 = data)
 
 # save site55
-save(duration, 
-     site55,
-     file = '~/Dropbox/1current/sRealm/local_data/timeSeries_site55_pid-1-24.Rdata')
+save(site55,
+     file = '~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/mobsim_v2_timeSeries_site55_pid-1-24.Rdata')
 
 # save all the time series (and the subsamples of site55 only)
 save(dat_ts, 

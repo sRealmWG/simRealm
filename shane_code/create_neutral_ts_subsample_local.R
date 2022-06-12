@@ -2,17 +2,15 @@
 
 library(tidyverse)
 
-neutral_dat <- read_csv('~/Dropbox/1current/sRealm/simRealm/data/simulations/QEAYJ1252R_neutral_sim.csv')
+# v1 
+# neutral_dat <- read_csv('~/Dropbox/1current/sRealm/simRealm/data/simulations/QEAYJ1252R_neutral_sim.csv')
+# v2
+neutral_dat <- read_csv('~/Dropbox/1current/sRealm/simRealm/simRealm/data/simulations/neutral_sim_v2.csv')
 
 # want to subsample time series with duration between 3-100 years
-# use same distribution of durations created for mobsim calculations
-load('~/Dropbox/1current/sRealm/simRealm/data/time_series/timeSeries_site55_pid-1-24.Rdata')
-rm(site55)
-# duration = tibble(d = floor(rlnorm(n = 250, meanlog = 2.3, sdlog = 1))) %>% 
-#   filter(d > 2 & d < 101)
-
-hist(duration$d)
-
+# duration d (tibble)
+load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/duration.Rdata')
+# hist(duration$d)
 
 # get time series of duration d from the complete neutral_data set
 neutral_dat_nest <- neutral_dat %>% 
@@ -51,12 +49,14 @@ expand_subsample <- function(neutral_data, fraction){
 # subsample one quadrat only
 neutral_local_ts = neutral_dat_ts %>% 
   mutate(#ss100 = map2(.x = neutral_data, .y = 1, .f = ~expand_subsample(.x, .y)),
+    ss75 = map2(.x = neutral_data, .y = 0.75, .f = possibly(~expand_subsample(.x, .y), otherwise = NULL)),
     ss50 = map2(.x = neutral_data, .y = 0.5, .f = possibly(~expand_subsample(.x, .y), otherwise = NULL)),
+    ss25 = map2(.x = neutral_data, .y = 0.25, .f = possibly(~expand_subsample(.x, .y), otherwise = NULL)),
     ss10 = map2(.x = neutral_data, .y = 0.1, .f = possibly(~expand_subsample(.x, .y), otherwise = NULL))) %>% 
   rename(ss100 = neutral_data)
 
-# save site55
+# save 
 save(duration, 
      neutral_local_ts,
-     file = '~/Dropbox/1current/sRealm/simRealm/data/time_series/neutral_time_series.Rdata')
+     file = '~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series_v2_extraSubsamples.Rdata')
 

@@ -1,0 +1,53 @@
+﻿RivFishTIME is a database of time series of riverine fish community abundance. ,,
+,,
+Motivation: ,The database is the result of a global compilation effort of long-term riverine fish surveys from 46 regional and national monitoring programs as well as individual academic research efforts upon which numerous basic and applied questions in ecology and global change research can be explored. ,
+Main types of variables contained:,"The database includes 11,386 time-series of riverine fish community catch data, including 646,270 species-specific abundance records together with metadata related to geographic location and sampling methodology of each time-series.",
+Spatial location and grain:,"The database contains 11,072 unique sampling locations (stream reach), spanning 19 countries, 5 biogeographic realms, and 402 hydrographic basins worldwide.",
+Time period and grain:,The database encompasses the period 1951–2019. Each time-series is composed of a minimum of two yearly surveys and represents a minimum time span of 10 years.,
+Major taxa and level of measurement: ,The database includes 944 species of ray-finned fishes (Class Actinopterygii).,
+,,
+Data affiliated to publication/please cite as:,"Comte, L., Carvajal-Quintero, J, Tedesco, P., Giam, X., Brose, U., Eros, T., Filipe, A.F., Fortin, M.-J., Irving, K., Jacquet, C., Larsen, S., Sharma, S., Ruhi, A., Becker, F.G., Casatti L., Castaldelli, G., Dala-Corte, R.B., Davenport, S.R., Franssen, N.R., García-Berthou, E., Gavioli, A., Gido, K.B., Jimenez-Segura, L., Leitão, R.P., McLarney, B., Meador, J., Milardi, M., Moffatt, D.M., Occhi, T.V.T., Pompeu, P.S., Propst, D.L., Pyron, M., Salvador, G.N., Stefferud, J.A., Sutela, T., Taylor, C., Terui, A., Urabe, H., Vehanen, T., Vitule, J.R.S., Zeni, J.O., Olden, J.D. (Accepted) RivFishTIME: A global database of fish time-series to study global change ecology in riverine systems. Global Ecology and Biogeography. [DOI to be provided upon publication]",
+The above publication contains all further information and methods.,,
+Database manager/Primary contact:,Lise Comte (lcgcomte@gmail.com),
+,,
+We kindly ask the users to cite RivFishTIME as well as the source of each primary dataset in any published material produced using these data.,,
+Please also consider contacting the data holders listed in the RivFishTIME_SourceTable.csv file to propose a collaboration if focusing on particular datasets and/or using >5% of the data for an analysis.,,
+"We also warn data users that species abundance may not be directly comparable across sites, and refer to the original data sources for more information about the sampling protocols. ",,
+"RivFishTIME remains a work in progress so in order to help us improve the database, we encourage users to provide their feedback or querries to the primary database manager who will be happy to help. ",,
+,,
+"The database is organized in three tables given in .csv format, which can be linked using the unique dataset (SourceID) and time series (TimeSeriesID) identifiers as described below. ",,
+,,
+RivFishTIME_TimeseriesTable.csv,Time series characteristics table,
+Variable name,Data type,Variable description
+SourceID,character,unique identifier of the primary dataset
+SiteID,character,unique identifier of the site
+TimeSeriesID,character,unique identifier of the time series
+Protocol,character,"consistent sampling protocol used for each time series through time (electrofishing: backpack, shore-based or boat mounted electrofishers, netting: dip nets, gill nets, beach or pelagic seines, trapping: minnow traps, fyke nets or hoop nets, trawling)"
+Latitude,decimal,latitude of the sites (WGS84)
+Longitude,decimal,longitude of the sites (WGS84)
+BioRealm,character,biogeographic realm according to Olson et al. 2001 (https://databasin.org)
+HydroBasin,integer,hydrographic basin according to HydroSheds (version 1.0; http://hydrosheds.cr.usgs.gov)
+Country,character,country ISO code as described in the ISO 3166 international standard
+Region,character,regions/administrative unit name
+Province,character,province/administrative unit name
+Waterbody,character,sampled water body name
+,,
+RivFishTIME_SurveyTable.csv,Survey records table,
+Variable name,Data type,Variable description
+TimeSeriesID,character,unique identifier of the time-series
+SurveyID,character,unique identifier of the surveys
+Year,year,sampling year
+Quarter,integer,"sampling quarter (1: January-March; 2: April-June; 3: July-September, 4: October-December)"
+Species,character,latin name of fish species
+Abundance,decimal,species abundance records
+UnitAbundance,character,"unit of abundance records (abundance class, count, CPUE, individuals/100m2, Leslie index, relative abundance)"
+,,
+RivFishTIME_SourceTable.csv,Information source table,
+Variable name,Data type,Variable description
+SourceID,character,unique identifier of the primary dataset
+DataOwner,character,name(s) of the data responsible for each primary dataset
+PointContact,character,email address for inquiries about primary datasets
+Citation,character,reference(s) for each primary dataset
+URLaccess,character,online link to the raw data (when publicly available)
+,,
+Comment:,"The RivFishTIME_SourceTable.csv table is intended to provide further information about the different monitoring datasets. However, several datasets have been described in different publications. Because these publications provide complementary information about the datasets (e.g. detailed description of the methods in one and of the sites in the other), more than one publication might be associated with each dataset. Note that the choice of the publications was made at the discretion of the data owners (as listed in the table).",
