@@ -3,8 +3,8 @@ library(data.table)
 
 ## Parameter values ----
 ### Community
-source("./analysis/parameters/community_neutral_v2.r") # loads parameter_table
-outname <- 'v2'
+source("./analysis/parameters/community_neutral_v3.r") # loads parameter_table
+outname <- 'v3'
 
 
 ## Functions ----
@@ -38,7 +38,8 @@ tolong <- function(x, parameter_id = 1){
 
 ## Neutral simulations ----
 # Each replicate has a burnin and then a simulation period
-nrow(parameter_table)
+set.seed(parameter_table$SEED[1]) # set the seed for the random number generator
+print(nrow(parameter_table))
 for(i in 1:nrow(parameter_table)){
   cat(i)
   nburn <- parameter_table$NBURN[i]*parameter_table$N[i] # number of burnin timesteps
@@ -85,7 +86,7 @@ nrow(out)
 
 ## Simulation metadata ----
 metadata <- data.table::as.data.table(parameter_table)
-metadata[, unique_id := simulation_ID]
+metadata[, unique_id := outname]
 metadata[, date := Sys.time()]
 metadata[, simulation_function := "sim_neutral.R"]
 metadata[, untb_version := as.character(utils::packageVersion("untb"))]
