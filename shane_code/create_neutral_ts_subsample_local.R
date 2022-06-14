@@ -5,6 +5,8 @@ library(tidyverse)
 # v1 
 # neutral_dat <- read_csv('~/Dropbox/1current/sRealm/simRealm/data/simulations/QEAYJ1252R_neutral_sim.csv')
 # v2
+# neutral_dat <- read_csv('~/Dropbox/1current/sRealm/simRealm/simRealm/data/simulations/neutral_sim_v2.csv')
+# v3
 neutral_dat <- read_csv('~/Dropbox/1current/sRealm/simRealm/simRealm/data/simulations/neutral_sim_v2.csv')
 
 # want to subsample time series with duration between 3-100 years
@@ -58,5 +60,5 @@ neutral_local_ts = neutral_dat_ts %>%
 # save 
 save(duration, 
      neutral_local_ts,
-     file = '~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series_v2_extraSubsamples.Rdata')
+     file = '~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series_v3.Rdata')
 

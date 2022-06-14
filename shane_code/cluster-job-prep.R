@@ -3,8 +3,9 @@
 library(tidyverse)
 
 
-load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series.Rdata')
-load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series_v2.Rdata')
+# load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series.Rdata')
+# load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series_v2.Rdata')
+load('~/Dropbox/1current/sRealm/simRealm/simRealm/data/time_series/neutral_time_series_v3.Rdata')
 
 # separate each of the subsamples and nest all time steps for a given timeSeriesID
 neutral_ss100 <- neutral_local_ts %>% 
@@ -47,6 +48,21 @@ neutral_ss10 <- neutral_local_ts %>%
   ungroup() %>% 
   select(parameter_id, timeSeriesID,  data)
 
+for(i in 1:nrow(neutral_ss100)){
+  temp = neutral_ss100 %>% 
+    slice(i) 
+  
+  print(paste(i, ' of ', nrow(neutral_ss100)))
+  
+  file_name = paste0('parameter_id-', temp$parameter_id, '-', temp$timeSeriesID, '.csv')
+  dir = '~/Dropbox/1current/sRealm/local_data/neutral-ts-v3-100/'
+  
+  temp %>% 
+    unnest(cols = data) %>% 
+    write_csv(., file = paste0(dir,file_name))
+  
+}
+
 for(i in 1:nrow(neutral_ss75)){
   temp = neutral_ss75 %>% 
     slice(i) 
@@ -54,7 +70,7 @@ for(i in 1:nrow(neutral_ss75)){
   print(paste(i, ' of ', nrow(neutral_ss75)))
   
   file_name = paste0('parameter_id-', temp$parameter_id, '-', temp$timeSeriesID, '.csv')
-  dir = '~/Dropbox/1current/sRealm/local_data/neutral-ts-v2-75/'
+  dir = '~/Dropbox/1current/sRealm/local_data/neutral-ts-v3-75/'
   
   temp %>% 
     unnest(cols = data) %>% 
@@ -69,7 +85,7 @@ for(i in 1:nrow(neutral_ss50)){
   print(paste(i, ' of ', nrow(neutral_ss50)))
   
   file_name = paste0('parameter_id-', temp$parameter_id, '-', temp$timeSeriesID, '.csv')
-  dir = '~/Dropbox/1current/sRealm/local_data/neutral-ts-v2-50/'
+  dir = '~/Dropbox/1current/sRealm/local_data/neutral-ts-v3-50/'
   
   temp %>% 
     unnest(cols = data) %>% 
@@ -84,7 +100,7 @@ for(i in 1:nrow(neutral_ss25)){
   print(paste(i, ' of ', nrow(neutral_ss25)))
   
   file_name = paste0('parameter_id-', temp$parameter_id, '-', temp$timeSeriesID, '.csv')
-  dir = '~/Dropbox/1current/sRealm/local_data/neutral-ts-v2-25/'
+  dir = '~/Dropbox/1current/sRealm/local_data/neutral-ts-v3-25/'
   
   temp %>% 
     unnest(cols = data) %>% 
@@ -99,7 +115,7 @@ for(i in 1:nrow(neutral_ss10)){
   print(paste(i, ' of ', nrow(neutral_ss10)))
   
   file_name = paste0('parameter_id-', temp$parameter_id, '-', temp$timeSeriesID, '.csv')
-  dir = '~/Dropbox/1current/sRealm/local_data/neutral-ts-v2-10/'
+  dir = '~/Dropbox/1current/sRealm/local_data/neutral-ts-v3-10/'
   
   temp %>% 
     unnest(cols = data) %>% 
