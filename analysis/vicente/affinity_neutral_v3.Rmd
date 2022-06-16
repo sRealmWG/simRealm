@@ -1,0 +1,122 @@
+---
+title: "Affinity estimations <br> neutral v3"
+author: "Vicente J. Ontiveros"
+date: "5/19/2022"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = F, message = F)
+```
+
+```{r, warning = F}
+
+library(tidyverse)
+
+
+# Loading complete sampling
+load("analysis/vicente/ss100_v3.RData")
+
+neutral.est <- neutral_estimates_v3 %>% add_column(Subsampling = 100)
+
+# Load metadata
+n_metadata <- read.csv("data/simulations/neutral_metadatav3.csv")
+
+# Gathering all estimates -------------------------------------------------
+
+short.metadata <- n_metadata %>% select(2, 6, 7, 8)
+
+neutral.res <- inner_join(neutral.est, short.metadata)
+```
+
+# Affinity
+
+## Duration - 100% sampling
+
+```{r}
+ggplot(neutral.res %>% filter(Subsampling == 100) %>% filter(THETA == 40) %>% 
+          filter(M == .2) %>% filter(N == 1000), aes(x = Duration, y = raw_Affinity)) +
+   geom_point(alpha = .9, color = "#E76BF3") +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity") +
+   labs(color = "Subsampling")
+```
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(Subsampling == 100) %>% filter(THETA == 40) %>% 
+          filter(M == .2) %>% filter(N == 1000),
+           raw_Affinity ~ Duration))
+```
+
+Significant tendency to decrease with duration. Asymptotically unbiased. $\Theta$ = 40, M = .2, N = 1000.
+
+
+
+## Species pool size - 100% - duration > 13
+
+```{r}
+ggplot(neutral.res %>% 
+          filter(parameter_id < 10) %>% 
+          filter(Subsampling == 100) %>% 
+          filter(Duration > 13), 
+       aes(x = THETA, y = raw_Affinity, group = THETA)) +
+    geom_boxplot(outlier.shape = NA, color = "#E76BF3", fill = NA) +
+   geom_jitter(alpha = .25) +
+  theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity")
+```
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(parameter_id < 10) %>% filter(Subsampling == 100) %>% 
+          filter(Duration > 13),
+           raw_Affinity ~ THETA))
+```
+
+Significant but small increase. N = 1000, M = .2.
+
+
+## Local comm. size - 100% - duration > 13
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 20) %>% filter(Subsampling == 100) %>% 
+          filter(Duration > 13), 
+       aes(x = N, y = raw_Affinity, group = N)) +
+       geom_boxplot(outlier.shape = NA, color = "#E76BF3") +
+  geom_jitter(alpha = .25) +
+   scale_x_log10() +
+   annotation_logticks(sides = "b") +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity") +
+   labs(color = "Subsampling")
+```
+
+$\Theta$ = 40, M = .2.
+
+
+
+## New species arrival - 100% - dur >13
+
+```{r}
+ggplot(neutral.res %>% filter(parameter_id > 9) %>% 
+          filter(parameter_id < 21) %>% filter(Subsampling == 100) %>% 
+       filter(Duration > 13), 
+       aes(x = M, y = raw_Affinity, group = M)) +
+   geom_jitter(alpha = .25) +   
+   geom_boxplot(outlier.shape = NA, color = "#E76BF3", fill = NA) +
+   theme_bw() +
+   theme(legend.position = "bottom", panel.grid.minor = element_blank(), aspect.ratio = .618) + 
+   ylab("Affinity") +
+   labs(color = "Subsampling")
+```
+
+```{r, include = F}
+summary(lm(data = neutral.res %>% filter(parameter_id > 9) %>% 
+              filter(parameter_id < 21) %>% filter(Subsampling == 100) %>% 
+              filter(Duration > 13),
+           raw_Affinity ~ M))
+```
+
+Very small but significant increase. $\Theta$ = 40, N = 1000.
