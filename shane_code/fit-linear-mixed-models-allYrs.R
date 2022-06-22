@@ -3,7 +3,7 @@ library(tidyverse)
 rm(list=ls())
 
 setwd('/data/idiv_chase/simRealm/results/neutral/metric-ts')
-filelist = dir(pattern=paste0("neutral-v2-beta-100-"))
+filelist = dir(pattern=paste0("neutral-v3-beta-100-"))
 dat = tibble()
 for(i in 1:length(filelist)){
   load(filelist[i])
@@ -30,12 +30,12 @@ allYrs_100_mixed <- dat %>%
   ungroup()
 
 save(allYrs_100_mixed,
-     file = '/data/idiv_chase/simRealm/results/neutral/model_fits/allYrs_100_mixed.Rdata')
+     file = '/data/idiv_chase/simRealm/results/neutral/model_fits/v3/allYrs_100_mixed.Rdata')
 
 
 # repeat for subsampled data
 rm(list=ls())
-filelist = dir(pattern=paste0("neutral-v2-beta-75-"))
+filelist = dir(pattern=paste0("neutral-v3-beta-75-"))
 dat = tibble()
 for(i in 1:length(filelist)){
   load(filelist[i])
@@ -61,11 +61,11 @@ allYrs_75_mixed <- dat %>%
   ungroup()
 
 save(allYrs_75_mixed,
-     file = '/data/idiv_chase/simRealm/results/neutral/model_fits/allYrs_75_mixed.Rdata')
+     file = '/data/idiv_chase/simRealm/results/neutral/model_fits/v3/allYrs_75_mixed.Rdata')
 
 # 50% of the individuals
 rm(list=ls())
-filelist = dir(pattern=paste0("neutral-v2-beta-50-"))
+filelist = dir(pattern=paste0("neutral-v3-beta-50-"))
 dat = tibble()
 for(i in 1:length(filelist)){
   load(filelist[i])
@@ -92,11 +92,11 @@ allYrs_50_mixed <- dat %>%
   ungroup()
 
 save(allYrs_50_mixed,
-     file = '/data/idiv_chase/simRealm/results/neutral/model_fits/allYrs_50_mixed.Rdata')
+     file = '/data/idiv_chase/simRealm/results/neutral/model_fits/v3/allYrs_50_mixed.Rdata')
 
 # 25% of the individuals
 rm(list=ls())
-filelist = dir(pattern=paste0("neutral-v2-beta-25-"))
+filelist = dir(pattern=paste0("neutral-v3-beta-25-"))
 dat = tibble()
 for(i in 1:length(filelist)){
   load(filelist[i])
@@ -122,11 +122,11 @@ allYrs_25_mixed <- dat %>%
   ungroup()
 
 save(allYrs_25_mixed,
-     file = '/data/idiv_chase/simRealm/results/neutral/model_fits/allYrs_25_mixed.Rdata')
+     file = '/data/idiv_chase/simRealm/results/neutral/model_fits/v3/allYrs_25_mixed.Rdata')
 
 # 10% of the individuals
 rm(list=ls())
-filelist = dir(pattern=paste0("neutral-v2-beta-10-"))
+filelist = dir(pattern=paste0("neutral-v3-beta-10-"))
 dat = tibble()
 for(i in 1:length(filelist)){
   load(filelist[i])
@@ -152,11 +152,11 @@ allYrs_10_mixed <- dat %>%
   ungroup()
 
 save(allYrs_10_mixed,
-     file = '/data/idiv_chase/simRealm/results/neutral/model_fits/allYrs_10_mixed.Rdata')
+     file = '/data/idiv_chase/simRealm/results/neutral/model_fits/v3/allYrs_10_mixed.Rdata')
 
 # for mean ~ f(duration)
 rm(list=ls())
-filelist = dir(pattern=paste0("neutral-v2-beta-100-"))
+filelist = dir(pattern=paste0("neutral-v3-beta-100-"))
 dat = tibble()
 for(i in 1:length(filelist)){
   load(filelist[i])
@@ -177,4 +177,4 @@ allYrs_100_mean_duration <- dat_alt %>%
   ungroup()
 
 save(allYrs_100_mean_duration,
-     file = '/data/idiv_chase/simRealm/results/neutral/model_fits/allYrs_100_mean_duration.Rdata')
+     file = '/data/idiv_chase/simRealm/results/neutral/model_fits/v3/allYrs_100_mean_duration.Rdata')

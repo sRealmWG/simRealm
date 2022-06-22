@@ -2,7 +2,7 @@ library(tidyverse)
 # get array job task id (use as parameter_id [PID])
 PID = as.integer(Sys.getenv("SLURM_ARRAY_TASK_ID"))
 
-setwd('/data/idiv_chase/simRealm/data/neutral-ts-v2/')
+setwd('/data/idiv_chase/simRealm/data/neutral-ts-v3-100/')
 filelist = dir(pattern=paste0("parameter_id-", PID, "-"))
 
 dat = tibble()
@@ -75,6 +75,7 @@ for(i in 1:nrow(dat)){
   neutral_alpha_100 = bind_rows(neutral_alpha_100, alpha_temp)
 }
 
+setwd('/data/idiv_chase/simRealm/results/neutral/metric-ts/')
 save(neutral_beta_dist_100,
      neutral_alpha_100,
      file = Sys.getenv('OFILE'))

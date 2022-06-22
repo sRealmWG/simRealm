@@ -1,6 +1,6 @@
 library(tidyverse)
 # neutral results plots on eve: models fit to allYrs
-neutral_meta <- read_csv('/data/idiv_chase/simRealm/neutral_metadata_v2.csv')
+neutral_meta <- read_csv('/data/idiv_chase/simRealm/neutral_metadata_v3.csv')
 # parameter combinations: clean for plotting
 # M: migration rate
 # N: local community size (J)
@@ -10,20 +10,21 @@ neutral_meta <- neutral_meta %>%
   mutate(Spool = paste0('S=', THETA),
          Mlabel = paste0('M=', M),
          Nlocal = paste0('Nlocal=', N)) %>%
-  mutate(label = paste0(Spool, ', ', Nlocal, ', ', Mlabel))
+  mutate(label = paste0(Spool, ', ', Nlocal, ', ', Mlabel),
+         SN_label = paste0(Spool, ', ', Nlocal))
 
 neutral_meta$Nlocal = factor(neutral_meta$Nlocal, 
                              levels = c('Nlocal=100', 'Nlocal=200', 'Nlocal=300', 'Nlocal=500', 
                                         'Nlocal=1000', 'Nlocal=2000', 'Nlocal=3000', 'Nlocal=5000'))
 
 # assemblage size (use completely sampled communities only)
-load('/data/idiv_chase/simRealm/results/neutral/model_fits/allYrs_100_mixed.Rdata')
+load('/data/idiv_chase/simRealm/results/neutral/model_fits/v3/allYrs_100_mixed.Rdata')
 
 pid = neutral_meta %>% 
   filter(THETA==40 & M==0.2) %>% 
   pull(parameter_id)
 
-pdf('/data/idiv_chase/simRealm/results/neutral/figures/neutral-allYrs-local-assemblage-size.pdf',
+pdf('/data/idiv_chase/simRealm/results/neutral/figures/v3/neutral-allYrs-local-assemblage-size.pdf',
     width = 9, height = 9)
 
 allYrs_100_mixed %>% 
@@ -58,11 +59,11 @@ dev.off()
 
 
 # local sample completeness assemblage size (use completely sampled communities only)
-load('/data/idiv_chase/simRealm/results/neutral/model_fits/allYrs_100_mixed.Rdata')
-load('/data/idiv_chase/simRealm/results/neutral/model_fits/allYrs_75_mixed.Rdata')
-load('/data/idiv_chase/simRealm/results/neutral/model_fits/allYrs_50_mixed.Rdata')
-load('/data/idiv_chase/simRealm/results/neutral/model_fits/allYrs_25_mixed.Rdata')
-load('/data/idiv_chase/simRealm/results/neutral/model_fits/allYrs_10_mixed.Rdata')
+load('/data/idiv_chase/simRealm/results/neutral/model_fits/v3/allYrs_100_mixed.Rdata')
+load('/data/idiv_chase/simRealm/results/neutral/model_fits/v3/allYrs_75_mixed.Rdata')
+load('/data/idiv_chase/simRealm/results/neutral/model_fits/v3/allYrs_50_mixed.Rdata')
+load('/data/idiv_chase/simRealm/results/neutral/model_fits/v3/allYrs_25_mixed.Rdata')
+load('/data/idiv_chase/simRealm/results/neutral/model_fits/v3/allYrs_10_mixed.Rdata')
 
 pid = neutral_meta %>% 
   filter(THETA==40 & M==0.2) %>% 
@@ -86,7 +87,7 @@ completeness_dat <- bind_rows(
     filter(parameter_id %in% pid) %>% 
     mutate(completeness = 10))
 
-pdf('/data/idiv_chase/simRealm/results/neutral/figures/neutral-allYrs-local-completeness.pdf',
+pdf('/data/idiv_chase/simRealm/results/neutral/figures/v3/neutral-allYrs-local-completeness.pdf',
     width = 9, height = 9)
 
 completeness_dat %>% 
@@ -124,7 +125,7 @@ pid = neutral_meta %>%
   distinct(THETA, .keep_all = TRUE) %>% 
   pull(parameter_id)
 
-pdf('/data/idiv_chase/simRealm/results/neutral/figures/neutral-allYrs-theta.pdf',
+pdf('/data/idiv_chase/simRealm/results/neutral/figures/v3/neutral-allYrs-theta.pdf',
     width = 9, height = 9)
 
 allYrs_100_mixed %>% 
@@ -164,7 +165,7 @@ pid = neutral_meta %>%
   filter(THETA==40) %>% 
   pull(parameter_id)
 
-pdf('/data/idiv_chase/simRealm/results/neutral/figures/neutral-allYrs-movement.pdf',
+pdf('/data/idiv_chase/simRealm/results/neutral/figures/v3/neutral-allYrs-movement.pdf',
     width = 9, height = 9)
 
 allYrs_100_mixed %>% 
@@ -172,7 +173,7 @@ allYrs_100_mixed %>%
   unnest(Jac_mean) %>% 
   left_join(neutral_meta) %>% 
   ggplot() +
-  # facet_wrap(~label) +
+  facet_wrap(~SN_label) +
   geom_point(aes(x = M, y = Jac_mean)) +
   stat_smooth(aes(x = M, y = Jac_mean),
               method = 'gam', 
@@ -188,6 +189,7 @@ allYrs_100_mixed %>%
   left_join(neutral_meta) %>% 
   rename(slope = estimate) %>% 
   ggplot() +
+  facet_wrap(~SN_label) +
   geom_point(aes(x = M, y = slope)) +
   stat_smooth(aes(x = M, y = slope),
               method = 'gam', 
@@ -214,8 +216,8 @@ duration <- duration %>%
 duration$ts_length <- factor(duration$ts_length,
                              levels = c('< 6', '6-10', '11-20', '21-50', '> 50'))
 
-load('/data/idiv_chase/simRealm/results/neutral/model_fits/allYrs_100_mean_duration.Rdata')
-load('/data/idiv_chase/simRealm/results/neutral/model_fits/allYrs_100_mixed.Rdata')
+load('/data/idiv_chase/simRealm/results/neutral/model_fits/v3/allYrs_100_mean_duration.Rdata')
+load('/data/idiv_chase/simRealm/results/neutral/model_fits/v3/allYrs_100_mixed.Rdata')
 
 slopes = allYrs_100_mixed %>% 
   filter(parameter_id %in% pid) %>% 
@@ -225,7 +227,7 @@ slopes2 = slopes$coefs[[1]]$timeSeriesID %>%
   as_tibble() %>% 
   mutate(timeSeriesID = rownames(slopes$coefs[[1]]$timeSeriesID))
 
-pdf('/data/idiv_chase/simRealm/results/neutral/figures/neutral-allYrs-duration.pdf',
+pdf('/data/idiv_chase/simRealm/results/neutral/figures/v3/neutral-allYrs-duration.pdf',
     width = 9, height = 9)
 
 allYrs_100_mean_duration %>% 
@@ -233,7 +235,6 @@ allYrs_100_mean_duration %>%
   unnest(Jac_mean) %>% 
   left_join(duration) %>% 
   ggplot() +
-  # facet_wrap(~label) +
   geom_point(aes(x = d, y = Jac_mean)) +
   stat_smooth(aes(x = d, y = Jac_mean),
               method = 'gam', 
