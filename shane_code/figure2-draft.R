@@ -58,7 +58,9 @@ N_mean_jac_plot <- allYrs_100_mixed %>%
   # geom_hline(yintercept = 0, lty = 2) + 
   labs(x = 'Local assemblage size (individuals)',
        y = 'Mean Jaccard\n(all year pairs)') +
-  theme_minimal()
+  theme_minimal() +
+  theme(axis.title = element_text(size = 7),
+        axis.text = element_text(size = 6))
 
 N_slope_affinity_plot <- allYrs_100_mixed %>% 
   filter(parameter_id %in% pid) %>% 
@@ -86,12 +88,14 @@ N_slope_affinity_plot <- allYrs_100_mixed %>%
                       guide = 'none') +
   labs(x = 'Local assemblage size (individuals)') +
   theme_minimal() +
-  theme(axis.title.y = element_text(color = linear_col, size=13),
-        axis.title.y.right = element_text(color = affinity_col, size=13),
+  theme(axis.title.y = element_text(color = linear_col, size=7),
+        axis.title.y.right = element_text(color = affinity_col, size=7),
+        axis.title.x = element_text(size = 7),
         axis.line.y.left = element_line(colour = linear_col),
-        axis.text.y.left = element_text(colour = linear_col),
+        axis.text.y.left = element_text(colour = linear_col, size = 6),
         axis.line.y.right = element_line(colour = affinity_col),
-        axis.text.y.right = element_text(colour = affinity_col)
+        axis.text.y.right = element_text(colour = affinity_col, size = 6),
+        axis.text.x = element_text(size = 6)
   )
 
 
@@ -135,9 +139,11 @@ completeness_meanJac_plot <- completeness_dat %>%
   geom_hline(yintercept = 0, lty = 2) + 
   labs(x = 'Percentage of individuals sampled',
        y = 'Mean Jaccard\n(all year pairs)') +
-  theme_minimal()
+  theme_minimal() +
+  theme(axis.title = element_text(size = 7),
+        axis.text = element_text(size = 6))
 
-# completeness_slope_affinity_plot <-
+completeness_slope_affinity_plot <-
 completeness_dat %>% 
   unnest(Jac_hlm_tidy) %>% 
   filter(term=='c_temp_dist') %>% 
@@ -154,23 +160,25 @@ completeness_dat %>%
   stat_smooth(aes(x = completeness, y = slope, colour = 'linear_col'),
               method = 'gam',
               formula = y ~ s(x, bs = 'cs', k = 5)) +
-  stat_smooth(aes(x = completeness, y = raw_Affinity, colour = 'affinity_col'),
+  stat_smooth(aes(x = completeness, y = raw_Affinity/1000, colour = 'affinity_col'),
               method = 'gam', 
               formula = y ~ s(x, bs = 'cs', k = 5)) +
   scale_y_continuous(name = 'Slope\n(linear model of Jaccard all year pairs)',
-                     sec.axis = sec_axis(trans = ~.*1, # back transform so as numbers are correct on label
+                     sec.axis = sec_axis(trans = ~.*1000, # back transform so as numbers are correct on label
                                          name = 'Affinity')) +
   scale_colour_manual(values = c('linear_col' = linear_col,
                                  'affinity_col' = affinity_col),
                       guide = 'none') +
   labs(x = 'Percentage of individuals sampled') +
   theme_minimal() +
-  theme(axis.title.y = element_text(color = linear_col, size=13),
-        axis.title.y.right = element_text(color = affinity_col, size=13),
+  theme(axis.title.y = element_text(color = linear_col, size=7),
+        axis.title.y.right = element_text(color = affinity_col, size=7),
+        axis.title.x = element_text(size = 7),
         axis.line.y.left = element_line(colour = linear_col),
-        axis.text.y.left = element_text(colour = linear_col),
+        axis.text.y.left = element_text(colour = linear_col, size = 6),
         axis.line.y.right = element_line(colour = affinity_col),
-        axis.text.y.right = element_text(colour = affinity_col)
+        axis.text.y.right = element_text(colour = affinity_col, size = 6),
+        axis.text.x = element_text(size = 6)
   )
 
 completeness_combo <- cowplot::plot_grid(completeness_meanJac_plot,
@@ -195,9 +203,11 @@ Spool_meanJac_plot <- allYrs_100_mixed %>%
   # geom_hline(yintercept = 0, lty = 2) + 
   labs(x = 'Regional species pool size',
        y = 'Mean Jaccard\n(all year pairs)') +
-  theme_minimal()
+  theme_minimal() +
+  theme(axis.title = element_text(size = 7),
+        axis.text = element_text(size = 6))
 
-# Spool_slope_affinity_plot <-
+Spool_slope_affinity_plot <-
 allYrs_100_mixed %>% 
   filter(parameter_id %in% pid) %>% 
   unnest(Jac_hlm_tidy) %>% 
@@ -226,12 +236,14 @@ allYrs_100_mixed %>%
                       guide = 'none') +
   labs(x = 'Regional species pool size') +
   theme_minimal() +
-  theme(axis.title.y = element_text(color = linear_col, size=13),
-        axis.title.y.right = element_text(color = affinity_col, size=13),
+  theme(axis.title.y = element_text(color = linear_col, size=7),
+        axis.title.y.right = element_text(color = affinity_col, size=7),
         axis.line.y.left = element_line(colour = linear_col),
-        axis.text.y.left = element_text(colour = linear_col),
+        axis.text.y.left = element_text(colour = linear_col, size = 6),
         axis.line.y.right = element_line(colour = affinity_col),
-        axis.text.y.right = element_text(colour = affinity_col)
+        axis.text.y.right = element_text(colour = affinity_col, size = 6),
+        axis.text.x = element_text(size = 6),
+        axis.title.x = element_text(size = 7)
   )
 
 Spool_combo <- cowplot::plot_grid(Spool_meanJac_plot,
@@ -257,7 +269,9 @@ movement_meanJac_plot <- allYrs_100_mixed %>%
   # geom_hline(yintercept = 0, lty = 2) + 
   labs(x = 'Probability individual is replaced by individual from regional pool',
        y = 'Mean Jaccard\n(all year pairs)') +
-  theme_minimal()
+  theme_minimal() +
+  theme(axis.title = element_text(size = 7),
+        axis.text = element_text(size = 6))
 
 movement_slope_affinity_plot <- allYrs_100_mixed %>% 
   filter(parameter_id %in% pid) %>% 
@@ -287,12 +301,14 @@ movement_slope_affinity_plot <- allYrs_100_mixed %>%
                       guide = 'none') +
   labs(x = 'Probability individual is replaced by individual from regional pool') +
   theme_minimal() +
-  theme(axis.title.y = element_text(color = linear_col, size=13),
-        axis.title.y.right = element_text(color = affinity_col, size=13),
+  theme(axis.title.y = element_text(color = linear_col, size=7),
+        axis.title.y.right = element_text(color = affinity_col, size=7),
         axis.line.y.left = element_line(colour = linear_col),
-        axis.text.y.left = element_text(colour = linear_col),
+        axis.text.y.left = element_text(colour = linear_col, size = 6),
         axis.line.y.right = element_line(colour = affinity_col),
-        axis.text.y.right = element_text(colour = affinity_col)
+        axis.text.y.right = element_text(colour = affinity_col, size = 6),
+        axis.title.x = element_text(size = 7),
+        axis.text.x = element_text(size = 6)
   )
 
 movement_combo <- cowplot::plot_grid(movement_meanJac_plot,
@@ -335,7 +351,9 @@ duration_meanJac_plot <- allYrs_100_mean_duration %>%
   # geom_hline(yintercept = 0, lty = 2) + 
   labs(x = 'Duration of time series',
        y = 'Mean Jaccard\n(all year pairs)') +
-  theme_minimal()
+  theme_minimal() +
+  theme(axis.title = element_text(size = 7),
+        axis.text = element_text(size = 6))
 
 duration_slope_affinity_plot <-
 slopes2 %>%  
@@ -364,12 +382,14 @@ slopes2 %>%
                                  'affinity_col' = affinity_col),
                       guide = 'none') +
   theme_minimal() +
-  theme(axis.title.y = element_text(color = linear_col, size=13),
-        axis.title.y.right = element_text(color = affinity_col, size=13),
+  theme(axis.title.y = element_text(color = linear_col, size=7),
+        axis.title.y.right = element_text(color = affinity_col, size=7),
         axis.line.y.left = element_line(colour = linear_col),
-        axis.text.y.left = element_text(colour = linear_col),
+        axis.text.y.left = element_text(colour = linear_col, size = 6),
         axis.line.y.right = element_line(colour = affinity_col),
-        axis.text.y.right = element_text(colour = affinity_col)
+        axis.text.y.right = element_text(colour = affinity_col, size = 6),
+        axis.text.x = element_text(size = 6),
+        axis.title.x = element_text(size = 7)
   )
 
 duration_combo <- cowplot::plot_grid(duration_meanJac_plot,
@@ -378,12 +398,14 @@ duration_combo <- cowplot::plot_grid(duration_meanJac_plot,
 cowplot::plot_grid(N_combo,
                    completeness_combo,
                    Spool_combo,
+                   movement_combo,
                    duration_combo, 
                    labels = c('a. Local assemblage size',
                               'b. Completeness of local sample',
                               'c. Regional species pool',
-                              'd. Time series duration'), label_size = 12
-                  )
+                              'd. Movement',
+                              'e. Time series duration'), label_size = 8,
+                   ncol = 2)
 
-ggsave('~/Dropbox/1current/sRealm/simRealm/simRealm/figures/simResults.png',
+ggsave('~/Dropbox/1current/sRealm/simRealm/simRealm/figures/simResults.pdf',
        width = 290, height = 200, units = 'mm')
