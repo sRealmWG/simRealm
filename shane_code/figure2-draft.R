@@ -207,7 +207,7 @@ Spool_meanJac_plot <- allYrs_100_mixed %>%
   theme(axis.title = element_text(size = 7),
         axis.text = element_text(size = 6))
 
-Spool_slope_affinity_plot <-
+# Spool_slope_affinity_plot <-
 allYrs_100_mixed %>% 
   filter(parameter_id %in% pid) %>% 
   unnest(Jac_hlm_tidy) %>% 
@@ -220,10 +220,11 @@ allYrs_100_mixed %>%
               select(parameter_id, N, THETA, raw_Affinity)
   ) %>% 
   ggplot() +
-  # geom_point(aes(x = THETA, y = slope)) +
+  geom_point(aes(x = THETA, y = slope)) +
   stat_smooth(aes(x = THETA, y = slope, colour = 'linear_col'),
               method = 'gam',
               formula = y ~ s(x, bs = 'cs', k = 5)) +
+  geom_point(aes(x = THETA, y = raw_Affinity, colour = 'affinity_col')) +
   stat_smooth(aes(x = THETA, y = raw_Affinity, colour = 'affinity_col'),
               method = 'gam', 
               formula = y ~ s(x, bs = 'cs', k = 5)) +
