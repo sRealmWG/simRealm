@@ -39,7 +39,7 @@ load('~/Dropbox/1current/sRealm/local_data/neutral_v2_allYrs_100_mean_duration.R
 # two colour theme 
 linear_col = '#bc5090'
 affinity_col = '#ffa600'
-
+mean_col = 'blue'
 
 # assemblage size (use completely sampled communities only)
 pid = neutral_meta %>% 
@@ -76,7 +76,7 @@ N_slope_affinity_plot <-
   neutral.res %>% 
               filter(parameter_id %in% pid & (Subsampling == 100)) %>% 
               select(parameter_id, timeSeriesID, N, raw_Affinity) %>% 
-  left_join(slopes %>%
+  left_join(lm_slopes %>%
               select(parameter_id, timeSeriesID, estimate)) %>%
   ggplot() +
   # geom_point(aes(x = N, y = slope)) +
@@ -99,7 +99,7 @@ N_slope_affinity_plot <-
   theme_minimal() +
   theme(axis.title = element_text(size=7),
         axis.text = element_text(size = 6),
-        legend.position = c(1,1),
+        legend.position = 'none',
         legend.justification = c(1,1)
   )
 
@@ -230,11 +230,11 @@ lm_slopes %>%
               select(parameter_id, timeSeriesID, N, THETA, raw_Affinity)
   ) %>% 
   ggplot() +
-  geom_point(aes(x = THETA, y = slope)) +
+  # geom_point(aes(x = THETA, y = slope)) +
   stat_smooth(aes(x = THETA, y = slope, colour = 'linear_col'),
               method = 'gam',
               formula = y ~ s(x, bs = 'cs', k = 5)) +
-  geom_point(aes(x = THETA, y = raw_Affinity, colour = 'affinity_col')) +
+  # geom_point(aes(x = THETA, y = raw_Affinity, colour = 'affinity_col')) +
   stat_smooth(aes(x = THETA, y = raw_Affinity, colour = 'affinity_col'),
               method = 'gam', 
               formula = y ~ s(x, bs = 'cs', k = 5)) +
@@ -260,6 +260,12 @@ pid = neutral_meta %>%
   filter(THETA==40) %>% 
   pull(parameter_id)
 
+lm_slopes = allYrs_100_mixed %>% 
+  filter(parameter_id %in% pid) %>% 
+  mutate(coefs = map(Jac_hlm, ~tidy(., effects = 'ran_coefs'))) %>% 
+  unnest(coefs) %>% 
+  filter(term == 'c_temp_dist') %>% 
+  rename(timeSeriesID = level)
 
 movement_meanJac_plot <- allYrs_100_mixed %>% 
   filter(parameter_id %in% pid) %>% 
@@ -278,16 +284,14 @@ movement_meanJac_plot <- allYrs_100_mixed %>%
   theme(axis.title = element_text(size = 7),
         axis.text = element_text(size = 6))
 
-movement_slope_affinity_plot <- allYrs_100_mixed %>% 
-  filter(parameter_id %in% pid) %>% 
-  unnest(Jac_hlm_tidy) %>% 
-  filter(term=='c_temp_dist') %>% 
-  left_join(neutral_meta) %>% 
+movement_slope_affinity_plot <- lm_slopes %>% 
+  select(parameter_id, timeSeriesID, estimate) %>% 
+  left_join(neutral_meta %>% 
+              select(parameter_id, M)) %>% 
   rename(slope = estimate) %>% 
-  select(parameter_id, slope, M) %>% 
   left_join(neutral.res %>% 
               filter(parameter_id %in% pid & Subsampling==100) %>% 
-              select(parameter_id, raw_Affinity, M)
+              select(parameter_id, timeSeriesID, raw_Affinity, M)
             ) %>% 
   ggplot() +
   # geom_point(aes(x = M, y = slope)) +
@@ -388,11 +392,52 @@ slopes2 %>%
 duration_combo <- cowplot::plot_grid(duration_meanJac_plot,
                    duration_slope_affinity_plot)
 
-cowplot::plot_grid(N_combo,
+
+source('~/Dropbox/1current/R_random/functions/gg_legend.R')
+leg_plot <- slopes2 %>%  
+  left_join(duration) %>% 
+  rename(slope = c_temp_dist) %>% 
+  select(d, slope, timeSeriesID) %>% 
+  left_join(neutral.res %>% 
+              filter(parameter_id %in% pid & Subsampling==100) %>% 
+              mutate(d = Duration - 1) %>%
+              select(d, raw_Affinity, timeSeriesID)) %>% 
+  ggplot() +
+  # geom_point(aes(x = d, y = slope, colour = 'linear_col')) +
+  stat_smooth(aes(x = d, y = slope, colour = 'linear_col'),
+              method = 'gam', 
+              formula = y ~ s(x, bs = 'cs', k = 5)) +
+  # geom_point(aes(x = d, y = raw_Affinity, colour = 'affinity_col')) +
+  stat_smooth(aes(x = d, y = raw_Affinity, colour = 'affinity_col'),
+              method = 'gam', 
+              formula = y ~ s(x, bs = 'cs', k = 5)) +
+  stat_smooth(data = allYrs_100_mean_duration %>% 
+                filter(parameter_id %in% pid) %>% 
+                unnest(Jac_mean) %>% 
+                left_join(duration),
+              aes(x = d, y = Jac_mean, colour = 'mean_col'),
+              method = 'gam', 
+              formula = y ~ s(x, bs = 'cs', k = 5)) +
+  # geom_hline(yintercept = 0, lty = 2) + 
+  labs(x = 'Duration of time series') +
+  scale_y_continuous(name = 'Parameter estimate') +
+  scale_colour_manual(values = c('mean_col' = mean_col,
+                                 'linear_col' = linear_col,
+                                 'affinity_col' = affinity_col
+                                 ),
+                      name = '',
+                      labels = c('mean_col' = 'Mean',
+                                 'linear_col' = 'Linear model (slope)',
+                                 'affinity_col' = 'Affinity (non-linear)')) 
+
+leg_col <- gg_legend(leg_plot)
+
+cowplot::plot_grid(duration_combo, 
                    completeness_combo,
+                   N_combo,
                    Spool_combo,
                    movement_combo,
-                   duration_combo, 
+                   leg_col,
                    labels = c('a. Time series duration',
                               'b. Completeness of local sample',
                               'c. Local assemblage size',
