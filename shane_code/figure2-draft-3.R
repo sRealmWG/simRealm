@@ -55,7 +55,7 @@ lm_slopes = allYrs_100_mixed %>%
   filter(term == 'c_temp_dist') %>% 
   rename(timeSeriesID = level)
 
-N_plot <-
+# N_plot <-
   neutral.res %>% 
               filter(parameter_id %in% pid & (Subsampling == 100)) %>% 
               select(parameter_id, timeSeriesID, N, raw_Affinity) %>% 
@@ -83,7 +83,8 @@ N_plot <-
   scale_colour_manual(values = c('linear_col' = linear_col,
                                  'affinity_col' = affinity_col,
                                  'mean_col' = mean_col),
-                      guide = 'none') +
+                      # guide = 'none'
+                      ) +
     labs(x = 'Local assemblage size (individuals)') +
   theme_classic() +
   theme(axis.title.y = element_text(size=7),

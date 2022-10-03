@@ -36,7 +36,7 @@
 library(tidyverse)
 
 ##first setwd to project directory
-
+setwd('~/Dropbox/1current/sRealm/simRealm/simRealm/')
 ##import data and metadata
 ft <- read_csv("case_study/RivFishTIME/1873_10_1873_2_RivFishTIME_SurveyTable.csv")
 meta <- read_csv("case_study/RivFishTIME/1873_10_1873_2_RivFishTIME_TimeseriesTable.csv")[-13]
@@ -476,7 +476,8 @@ jac_horn_coefs %>%
    filter(term=='.x$c_temp_dist') %>%
    ggplot() +
    # geom_point(aes(x = n_years, y = mean_Jac, color=n_sps, size=n_sps), alpha= 0.85) +
-   stat_smooth(aes(x = n_years, y = jac_estimate), color= "#bc5090", method = "lm", se = F, size = 0.5) +
+   stat_smooth(aes(x = n_years, y = jac_estimate), color= "#bc5090", 
+               method = "gam", se = TRUE, size = 0.5) +
    labs(x = 'n_years',
         y = 'Jaccard slope (rate of turnover)',
         subtitle = 'All years comparison') +
@@ -572,7 +573,7 @@ ggplot() +
 ##calculate affinity #####################
 
 ## following Vicente's script "affinity_neutralv3.R" and adjusting as needed (similar to above for beta metrics)
-
+#devtools::install_version("island",version="0.2.7")
 library(island)
 # library(gsl)
 
